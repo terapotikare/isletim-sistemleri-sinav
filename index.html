@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İşletim Sistemleri Ara Sınav — 2 Saatlik Tekrarlı Çalışma Kampı</title>
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #141c2c;
+      --muted: #55627a;
+      --border: #dfe6f2;
+      --primary: #3b5bdb;
+      --primary-soft: #edf2ff;
+      --success: #16a34a;
+      --success-soft: #dcfce7;
+      --danger: #dc2626;
+      --danger-soft: #fee2e2;
+      --warn: #d97706;
+      --warn-soft: #fef3c7;
+      --purple: #7c3aed;
+      --purple-soft: #f3e8ff;
+      --teal: #0d9488;
+      --teal-soft: #ccfbf1;
+      --shadow: 0 8px 24px rgba(20, 28, 44, 0.06);
+      --radius: 14px;
+    }
+
+    body.dark {
+      --bg: #0e1420;
+      --surface: #161f30;
+      --surface-2: #1d283d;
+      --text: #eef2fa;
+      --muted: #9aa9c4;
+      --border: #2a3954;
+      --primary: #6c8cff;
+      --primary-soft: rgba(108, 140, 255, 0.16);
+      --success: #4ade80;
+      --success-soft: rgba(74, 222, 128, 0.14);
+      --danger: #f87171;
+      --danger-soft: rgba(248, 113, 113, 0.16);
+      --warn: #fbbf24;
+      --warn-soft: rgba(251, 191, 36, 0.15);
+      --purple: #c084fc;
+      --purple-soft: rgba(192, 132, 252, 0.15);
+      --teal: #2dd4bf;
+      --teal-soft: rgba(45, 212, 191, 0.14);
+      --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Sticky Topbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, #3b5bdb, #7c3aed);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      letter-spacing: 0.4px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+    .timer-val {
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--primary);
+      min-width: 68px;
+      text-align: center;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill-stat {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+    .pill-stat.warn {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    /* Main Nav Tabs */
+    .nav-wrap {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 18px;
+      overflow-x: auto;
+    }
+    .nav-tabs {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      gap: 6px;
+    }
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 13px 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { color: var(--text); }
+    .nav-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1180px;
+      margin: 22px auto 60px;
+      padding: 0 18px;
+    }
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards & Grids */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 10px; }
+
+    h2 { margin: 0 0 12px; font-size: 21px; }
+    h3 { margin: 0 0 10px; font-size: 16.5px; }
+    h4 { margin: 0 0 6px; font-size: 14.5px; }
+    p { margin: 0 0 10px; }
+    .muted { color: var(--muted); }
+
+    /* Buttons */
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover { filter: brightness(0.96); transform: translateY(-1px); }
+    .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn.success { background: var(--success); color: #fff; border-color: var(--success); }
+    .btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+    .btn.warn { background: var(--warn); color: #fff; border-color: var(--warn); }
+    .btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 8px; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .b-blue { background: var(--primary-soft); color: var(--primary); }
+    .b-green { background: var(--success-soft); color: var(--success); }
+    .b-red { background: var(--danger-soft); color: var(--danger); }
+    .b-warn { background: var(--warn-soft); color: var(--warn); }
+    .b-purple { background: var(--purple-soft); color: var(--purple); }
+    .b-teal { background: var(--teal-soft); color: var(--teal); }
+
+    /* Alerts */
+    .trap-box {
+      background: var(--danger-soft);
+      border-left: 4px solid var(--danger);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+    .tip-box {
+      background: var(--primary-soft);
+      border-left: 4px solid var(--primary);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+    .ok-box {
+      background: var(--success-soft);
+      border-left: 4px solid var(--success);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+    .warn-box {
+      background: var(--warn-soft);
+      border-left: 4px solid var(--warn);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 14px;
+      font-size: 13.5px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 9px 11px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface-2);
+      font-weight: 700;
+    }
+
+    /* Progress bar */
+    .progress {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b5bdb, #16a34a);
+      transition: width 0.3s ease;
+    }
+
+    /* Plan timeline */
+    .plan-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: var(--surface-2);
+      transition: border-color 0.2s;
+    }
+    .plan-step.done {
+      border-color: var(--success);
+      background: var(--success-soft);
+    }
+    .plan-time {
+      min-width: 88px;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--primary);
+      background: var(--surface);
+      padding: 6px 8px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    /* Sub-tabs */
+    .subtabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .subtab {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .subtab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Quiz UI */
+    .quiz-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 13px 15px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 14.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 500;
+    }
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .quiz-option.correct {
+      border-color: var(--success);
+      background: var(--success-soft);
+      font-weight: 700;
+    }
+    .quiz-option.wrong {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+    }
+    .quiz-option:disabled { cursor: default; }
+
+    /* Interactive State Diagram & Race Sim */
+    .state-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .state-node {
+      flex: 1;
+      min-width: 150px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      text-align: center;
+      background: var(--surface-2);
+      transition: all 0.25s;
+    }
+    .state-node.active-state {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      transform: scale(1.04);
+      box-shadow: 0 0 0 4px rgba(59,91,219,0.18);
+    }
+
+    /* Gantt Chart */
+    .gantt {
+      display: flex;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0 4px;
+      min-height: 46px;
+    }
+    .gantt-seg {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      border-right: 1px solid rgba(255,255,255,0.35);
+      padding: 6px 2px;
+    }
+    .gantt-seg small { font-weight: 600; font-size: 11px; opacity: 0.92; }
+    .c-A { background: #3b5bdb; }
+    .c-B { background: #0d9488; }
+    .c-C { background: #d97706; }
+
+    /* Flashcards */
+    .flashcard-wrap {
+      perspective: 1000px;
+      max-width: 680px;
+      margin: 18px auto;
+    }
+    .flashcard {
+      min-height: 250px;
+      border-radius: 18px;
+      border: 2px solid var(--border);
+      background: var(--surface-2);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      box-shadow: var(--shadow);
+    }
+    .flashcard:hover { border-color: var(--primary); }
+    .flashcard.flipped {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    /* Inputs */
+    input[type="number"], input[type="text"], textarea, select {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 11px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    textarea { width: 100%; min-height: 85px; resize: vertical; }
+    .inline-input { width: 78px; text-align: center; font-weight: 700; }
+
+    .check-ok { border-color: var(--success) !important; background: var(--success-soft) !important; }
+    .check-bad { border-color: var(--danger) !important; background: var(--danger-soft) !important; }
+
+    .kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      font-size: 11px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    @media (max-width: 720px) {
+      .topbar { position: static; padding: 10px 12px; gap: 8px; }
+      .brand h1 { font-size: 14.5px; }
+      .nav-wrap { position: sticky; top: 0; z-index: 99; padding: 0 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+      .nav-btn { padding: 11px 10px; font-size: 13px; }
+      .container { padding: 0 10px; margin-top: 14px; }
+      .card { padding: 14px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .plan-step { flex-direction: column; gap: 8px; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+      .quiz-option { padding: 14px 12px; font-size: 15px; }
+      .flashcard { min-height: 210px; padding: 20px 16px; }
+    }
+
+    @media print {
+      .topbar, .nav-wrap, .no-print { display: none !important; }
+      .section { display: none !important; }
+      #sec-cheatsheet { display: block !important; }
+      body { background: #fff; color: #000; }
+      .card { box-shadow: none; border: 1px solid #bbb; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-badge">İS • 1–6</div>
+      <div>
+        <h1>İşletim Sistemleri Ara Sınav — 2 Saatlik Kamp</h1>
+        <small>Atatürk Üni. YBS • Tekrarlı Öğrenme & Aktif Hatırlama Motoru</small>
+      </div>
+    </div>
+
+    <div class="timer-box">
+      <span>⏱️ 2 Saat:</span>
+      <span class="timer-val" id="timerDisplay">120:00</span>
+      <button class="btn sm primary" id="timerToggleBtn" onclick="toggleTimer()">Başlat</button>
+      <button class="btn sm" onclick="resetTimer()">Sıfırla</button>
+    </div>
+
+    <div class="top-actions">
+      <span class="pill-stat" id="masteryPill">Öğrenilen: 0/66</span>
+      <span class="pill-stat warn" id="weakPill">Tekrar Kuyruğu: 0</span>
+      <button class="btn sm" onclick="toggleDark()" id="darkBtn">🌙 Gece Modu</button>
+    </div>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav class="nav-wrap">
+    <div class="nav-tabs">
+      <button class="nav-btn active" onclick="showTab('plan', this)">🏠 2 Saatlik Plan</button>
+      <button class="nav-btn" onclick="showTab('notes', this)">📚 Konu Özeti & Simülatör</button>
+      <button class="nav-btn" onclick="showTab('quiz', this)">🔁 Tekrarlı Test Motoru (66)</button>
+      <button class="nav-btn" onclick="showTab('calc', this)">🧮 Hesaplama Atölyesi (H5–6)</button>
+      <button class="nav-btn" onclick="showTab('cards', this)">🃏 Kartlar & Sözlük (42)</button>
+      <button class="nav-btn" onclick="showTab('written', this)">✍️ Kısa Cevap & Vaka (16)</button>
+      <button class="nav-btn" onclick="showTab('exam', this)">🏆 20 Soruluk Deneme</button>
+      <button class="nav-btn" onclick="showTab('cheatsheet', this)">⚡ Son 5 Dk Özet</button>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ==================== 1. 2 SAATLIK PLAN ==================== -->
+    <section id="sec-plan" class="section active">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2>🎯 Yarınki Ara Sınav İçin 120 Dakikalık Akılda Kalıcı Plan</h2>
+            <p class="muted">
+              Sınav <strong>50 dakika</strong>, <strong>hesap makinesiz</strong> ve <strong>3 bölüm</strong>: Çoktan seçmeli (tuzak ağırlıklı), Kısa cevaplı (<strong>gerekçesiz cevap tam puan almaz!</strong>) ve Senaryoya dayalı uygulama.
+            </p>
+          </div>
+          <button class="btn primary" onclick="showTab('quiz', document.querySelectorAll('.nav-btn')[2])">🚀 Hemen Tekrarlı Teste Başla</button>
+        </div>
+
+        <div class="tip-box" style="margin-top:10px;">
+          <strong>🧠 Bu Dosya Sana Nasıl Öğretir? (Tekrarlı Öğrenme Kuralı):</strong>
+          Testte yanlış yaptığın veya <em>"Emin değilim, tekrar sor"</em> dediğin her soru otomatik olarak <strong>3 soru sonra yeniden karşına çıkar</strong> ve <strong>üst üste 2 kez doğru bilene kadar</strong> Tekrar Kuyruğundan çıkmaz. Aynı kritik kavramlar farklı iş senaryolarıyla 3 farklı açıdan sorulur!
+        </div>
+
+        <div style="margin:16px 0;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:6px;">
+            <span>Genel Sınav Hazırlık Oranın</span>
+            <span id="overallPctText">0%</span>
+          </div>
+          <div class="progress"><div class="progress-fill" id="overallBar" style="width:0%"></div></div>
+        </div>
+
+        <div class="grid-6" id="weekMasteryGrid"></div>
+      </div>
+
+      <div class="card">
+        <h3>📋 2 Saatlik Adım Adım Çalışma Akışı (Tamamladıkça İşaretle)</h3>
+        <div id="planList"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>⚖️ Sınavda Puan Kazandıran 3 Altın Kural</h3>
+          <ol style="padding-left:18px; margin:0;">
+            <li style="margin-bottom:8px;"><strong>Her kavramda 3 soruyu yanıtla:</strong> <em>Bu ne demek? Neden gerekli? Bir işletme örneği nedir?</em></li>
+            <li style="margin-bottom:8px;"><strong>Gerekçe şartı:</strong> Kısa cevap ve senaryoda sadece "Hazır" veya "Yarış durumu" yazıp bırakma — mutlaka 1 cümle gerekçe ekle!</li>
+            <li style="margin-bottom:8px;"><strong>Kesin kanıt yoksa kesin konuşma:</strong> "%8 CPU kullanımı varsa kesin ağ arızalıdır" deme; "Muhtemelen G/Ç veya sunucu bekleniyor, kesin neden için ek ölçüm gerekir" de!</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>🔥 Sınavda En Çok Sorulan 8 Klasik Tuzak</h3>
+          <ul style="padding-left:18px; margin:0; font-size:13.5px;">
+            <li><strong>Kesme</strong> bir hata değil, <em>olay bildirimidir</em>.</li>
+            <li><strong>Bekleyen süreç</strong> olay bitince doğrudan çalışmaz → önce <em>Hazır</em> olur.</li>
+            <li><strong>Yarış durumu</strong> için iki çekirdek şart değil → <em>tek çekirdekte</em> de olur.</li>
+            <li><strong>Yönetici hesabı</strong> ≠ <em>Çekirdek modu</em> (uygulama yine kullanıcı modunda!).</li>
+            <li><strong>Mutex ≠ Semafor</strong> (veri koruması vs kapasite/koşul sayımı).</li>
+            <li><strong>SJF</strong> her zaman en iyi değil (süre bilinmez, uzun iş <em>aç kalır</em>).</li>
+            <li><strong>Zaman dilimi (q)</strong> küçüldükçe hep iyileşmez (bağlam değiştirme maliyeti artar).</li>
+            <li><strong>Sayfa hatası</strong> program bozuk demek değil → sayfa sadece RAM'de değil, diskten gelir!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. KONU ÖZETİ & SİMÜLATÖR ==================== -->
+    <section id="sec-notes" class="section">
+      <div class="subtabs" id="noteTabs">
+        <button class="subtab active" onclick="showNoteWeek(1, this)">Hafta 1: Giriş</button>
+        <button class="subtab" onclick="showNoteWeek(2, this)">Hafta 2: Donanım & Yapı</button>
+        <button class="subtab" onclick="showNoteWeek(3, this)">Hafta 3: Süreç & Thread</button>
+        <button class="subtab" onclick="showNoteWeek(4, this)">Hafta 4: İletişim & Eşgüdüm</button>
+        <button class="subtab" onclick="showNoteWeek(5, this)">Hafta 5: CPU Zamanlama</button>
+        <button class="subtab" onclick="showNoteWeek(6, this)">Hafta 6: Bellek Yönetimi</button>
+        <button class="subtab" onclick="showNoteWeek(7, this)">🔗 6 Haftayı Birleştir</button>
+      </div>
+      <div id="noteContent"></div>
+    </section>
+
+    <!-- ==================== 3. TEKRARLI TEST MOTORU ==================== -->
+    <section id="sec-quiz" class="section">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <div>
+            <h2>🔁 Akıllı Tekrarlı Öğrenme Testi</h2>
+            <small class="muted">Yanlış yaptığın veya işaretlediğin her soru 3 soru sonra tekrar gelir; üst üste 2 kez bilince "Tam Öğrenildi ✅" olur.</small>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="badge b-green" id="qStreakBadge">🔥 Seri: 0</span>
+            <span class="badge b-blue" id="qMasteredBadge">✅ Öğrenilen: 0/66</span>
+            <span class="badge b-red" id="qWeakBadge">🔴 Tekrar Kuyruğu: 0</span>
+          </div>
+        </div>
+
+        <div class="subtabs" id="quizModeTabs">
+          <button class="subtab active" onclick="startQuizMode('smart', this)">🎯 Akıllı Karma (Tümü)</button>
+          <button class="subtab" onclick="startQuizMode('weak', this)">🔴 Zayıf & Yanlışlarım</button>
+          <button class="subtab" onclick="startQuizMode('traps', this)">⚠️ Tuzak & D/Y Maratonu</button>
+          <button class="subtab" onclick="startQuizMode('w1', this)">H1</button>
+          <button class="subtab" onclick="startQuizMode('w2', this)">H2</button>
+          <button class="subtab" onclick="startQuizMode('w3', this)">H3</button>
+          <button class="subtab" onclick="startQuizMode('w4', this)">H4</button>
+          <button class="subtab" onclick="startQuizMode('w5', this)">H5</button>
+          <button class="subtab" onclick="startQuizMode('w6', this)">H6</button>
+        </div>
+
+        <div id="quizArea"></div>
+
+        <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; font-size:12.5px; color:var(--muted);">
+          <span>Kısayollar: <span class="kbd">1</span>-<span class="kbd">5</span> cevapla • <span class="kbd">Enter</span> sonraki soru • <span class="kbd">R</span> tekrar kuyruğuna ekle</span>
+          <button class="btn sm" onclick="resetQuizProgress()">🗑️ Tüm Test İlerlemesini Sıfırla</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. HESAPLAMA ATÖLYESİ ==================== -->
+    <section id="sec-calc" class="section">
+      <div class="subtabs">
+        <button class="subtab active" onclick="showCalcTab('sched', this)">⏱️ Hafta 5: FCFS / SJF / RR & Yönetim Payı</button>
+        <button class="subtab" onclick="showCalcTab('mem', this)">🧠 Hafta 6: Adres Çevirme & Parçalanma</button>
+      </div>
+
+      <!-- SCHEDULING LAB -->
+      <div id="calc-sched">
+        <div class="card">
+          <h3>⏱️ Hesap Makinesiz CPU Zamanlama Pratiği (FCFS, SJF, Round Robin)</h3>
+          <p class="muted">Formüller: <strong>T = C − V</strong> (Toplam kalış), <strong>R = İlk CPU − V</strong> (İlk yanıt), <strong>W = T − B</strong> (G/Ç yoksa bekleme). Hepsi t = 0'da hazır!</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px;">
+            <label><strong>Örnek Seç:</strong></label>
+            <select id="schedPreset" onchange="loadSchedLab()">
+              <option value="0">Ders Örneği (A=8, B=4, C=2 | q=2)</option>
+              <option value="1">Hafta 5 Ödev (D=6, E=3, F=1 | q=2)</option>
+              <option value="2">Sınav Provası 1 (P1=6, P2=2, P3=4 | q=2)</option>
+              <option value="3">Sınav Provası 2 (X=5, Y=3, Z=2 | q=2)</option>
+              <option value="4">Sınav Provası 3 (A=9, B=3, C=3 | q=3)</option>
+            </select>
+            <label><strong>Yöntem:</strong></label>
+            <select id="schedAlgo" onchange="loadSchedLab()">
+              <option value="FCFS">FCFS (Geliş Sırası — Kesmesiz)</option>
+              <option value="SJF">SJF (En Kısa İş — Kesmesiz)</option>
+              <option value="RR">Round Robin (Dönüşümlü — Kesmeli)</option>
+            </select>
+            <button class="btn primary sm" onclick="checkSchedAnswers()">✅ Cevaplarımı Kontrol Et</button>
+            <button class="btn sm" onclick="revealSchedSolution()">👁️ Çizelge ve Çözümü Göster</button>
+          </div>
+
+          <div id="schedProblemBox"></div>
+          <div id="schedSolutionBox" style="display:none; margin-top:14px;"></div>
+        </div>
+
+        <div class="card">
+          <h3>⚙️ Bağlam Değiştirme Yönetim Payı Hesabı: s / (q + s)</h3>
+          <p class="muted">Slayt 20 kuralı: Bir tam zaman dilimi (q) + bir geçiş (s) çevriminde yönetim payı = <code>s / (q + s)</code>.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
+            <label>Geçiş maliyeti <strong>s</strong>: <input type="number" step="0.1" id="ovS" value="0.2" class="inline-input" oninput="calcOverhead()"></label>
+            <label>Zaman dilimi <strong>q</strong>: <input type="number" step="0.5" id="ovQ" value="2" class="inline-input" oninput="calcOverhead()"></label>
+            <button class="btn sm" onclick="setOv(0.2,1)">q=1 (Slayt)</button>
+            <button class="btn sm" onclick="setOv(0.2,2)">q=2 (Slayt)</button>
+            <button class="btn sm" onclick="setOv(0.2,8)">q=8 (Slayt)</button>
+            <button class="btn sm" onclick="setOv(0.5,2)">s=0.5, q=2</button>
+          </div>
+          <div id="ovResult" class="tip-box"></div>
+        </div>
+      </div>
+
+      <!-- MEMORY LAB -->
+      <div id="calc-mem" style="display:none;">
+        <div class="card">
+          <h3>🧠 Sayfa Tablosu ile Adres Çevirme Makinesi (Tekrarlı Pratik)</h3>
+          <p class="muted">Kural: <strong>Sayfa No = ⌊Sanal / Boyut⌋</strong> • <strong>Ofset = Sanal mod Boyut</strong> (Ofset DEĞİŞMEZ!) • <strong>Fiziksel = Çerçeve × Boyut + Ofset</strong>.</p>
+
+          <div class="grid-2" style="align-items:start;">
+            <div>
+              <h4>📋 Kullanılan Sayfa Tablosu (Ders Tablosu: 0→5, 1→2, 2→7, 3→1)</h4>
+              <table id="pageTableDisplay">
+                <thead><tr><th>Sanal Sayfa No</th><th>Fiziksel Çerçeve No</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td><strong>5</strong></td></tr>
+                  <tr><td>1</td><td><strong>2</strong></td></tr>
+                  <tr><td>2</td><td><strong>7</strong></td></tr>
+                  <tr><td>3</td><td><strong>1</strong></td></tr>
+                </tbody>
+              </table>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn sm primary" onclick="loadAddrPreset(1000, 1234)">Ders: 1000 / 1234</button>
+                <button class="btn sm primary" onclick="loadAddrPreset(1000, 456)">Slayt 13: 1000 / 456</button>
+                <button class="btn sm primary" onclick="loadAddrPreset(1000, 2789)">Etkinlik: 1000 / 2789</button>
+                <button class="btn sm warn" onclick="loadAddrPreset(4096, 5000)">Ders: 4096 / 5000</button>
+                <button class="btn sm warn" onclick="loadAddrPreset(4096, 3000)">Etkinlik: 4096 / 3000</button>
+                <button class="btn sm danger" onclick="loadAddrPreset(4096, 4096)">⚠️ TUZAK: 4096 / 4096</button>
+                <button class="btn sm" onclick="randomAddrDrill()">🎲 Rastgele Yeni Soru</button>
+              </div>
+            </div>
+
+            <div class="card" style="margin:0; background:var(--surface-2);">
+              <h4 id="addrPrompt">Soru yükleniyor...</h4>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0;">
+                <label>Sayfa No:<br><input type="number" id="inPage" class="inline-input" style="width:100%"></label>
+                <label>Ofset (bayt):<br><input type="number" id="inOffset" class="inline-input" style="width:100%"></label>
+                <label>Çerçeve No (Tablodan):<br><input type="number" id="inFrame" class="inline-input" style="width:100%"></label>
+                <label>Fiziksel Adres:<br><input type="number" id="inPhys" class="inline-input" style="width:100%"></label>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn primary sm" onclick="checkAddr()">✅ Kontrol Et</button>
+                <button class="btn sm" onclick="showAddrSolution()">👁️ Adım Adım Çözüm</button>
+              </div>
+              <div id="addrFeedback" style="margin-top:10px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📦 İç Parçalanma & JPEG RAM Hesabı Pratiği</h3>
+          <div class="grid-2">
+            <div style="background:var(--surface-2); padding:14px; border-radius:12px; border:1px solid var(--border);">
+              <h4>İç Parçalanma Alıştırması</h4>
+              <p id="fragQuestion" style="font-weight:700;"></p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0;">
+                <label>Sayfa Sayısı: <input type="number" id="inFragPages" class="inline-input"></label>
+                <label>Ayrılan (KiB): <input type="number" id="inFragAlloc" class="inline-input"></label>
+                <label>İç Parçalanma (KiB): <input type="number" id="inFragWaste" class="inline-input"></label>
+              </div>
+              <button class="btn primary sm" onclick="checkFrag()">Kontrol Et</button>
+              <button class="btn sm" onclick="nextFrag()">Sonraki Soru →</button>
+              <div id="fragFeedback" style="margin-top:8px;"></div>
+            </div>
+
+            <div style="background:var(--surface-2); padding:14px; border-radius:12px; border:1px solid var(--border);">
+              <h4>📷 Dersin JPEG → RAM Örneği (Slayt 6)</h4>
+              <ul style="padding-left:18px; margin:6px 0; font-size:13.5px;">
+                <li>Diskteki sıkıştırılmış JPEG dosyası: <strong>~4 MB</strong></li>
+                <li>12 MP (4000 × 3000) = 12 milyon piksel × 3 bayt = <strong>36 MB</strong> (açılmış görüntü)</li>
+                <li>Özgün (36) + Filtre sonucu (36) + Geri alma kopyası (36) = <strong>108 MB</strong>!</li>
+                <li><strong>Sınav dersi:</strong> Diskteki dosya boyutu ile RAM'de kaplanan alan aynı değildir. Kaydetmeden kapanan değişiklik yalnızca RAM'de olduğu için kaybolur!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. FLASHCARDS & SÖZLÜK ==================== -->
+    <section id="sec-cards" class="section">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2>🃏 Aktif Hatırlama Kartları (Tekrarlı Leitner Destesi)</h2>
+            <small class="muted">Karta tıkla (veya <span class="kbd">Space</span>) → cevabı gör → hatırlamadıysan 3 kart sonra tekrar gelsin!</small>
+          </div>
+          <span class="badge b-blue" id="fcStatus">Kart 1 / 42</span>
+        </div>
+
+        <div class="subtabs" style="margin-top:12px;">
+          <button class="subtab active" onclick="filterCards('all', this)">Tümü (42)</button>
+          <button class="subtab" onclick="filterCards('abbr', this)">Kısaltmalar (12)</button>
+          <button class="subtab" onclick="filterCards('terms', this)">TR ↔ EN Terimler (16)</button>
+          <button class="subtab" onclick="filterCards('concepts', this)">Benzetme & Kavramlar (14)</button>
+        </div>
+
+        <div class="flashcard-wrap">
+          <div class="flashcard" id="flashcardBox" onclick="flipCard()">
+            <span class="badge b-purple" id="fcTag" style="margin-bottom:12px;">Kavram</span>
+            <div id="fcFront" style="font-size:21px; font-weight:800;"></div>
+            <div id="fcBack" style="display:none; font-size:16px; margin-top:12px; line-height:1.6;"></div>
+            <small class="muted" id="fcHint" style="margin-top:18px;">Cevabı görmek için karta tıkla veya Boşluk (Space) tuşuna bas</small>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+          <button class="btn danger" onclick="rateCard(false)">❌ Hatırlamadım (3 kart sonra tekrar sor)</button>
+          <button class="btn success" onclick="rateCard(true)">✅ Aklımda Kaldı (Sonraki)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. KISA CEVAP & SENARYO STÜDYOSU ==================== -->
+    <section id="sec-written" class="section">
+      <div class="card">
+        <h2>✍️ Bölüm 2 (Kısa Cevap) & Bölüm 3 (Vaka/Senaryo) Yazma Stüdyosu</h2>
+        <div class="warn-box">
+          <strong>⚠️ Hocanın Sınav Uyarısı:</strong> "Kısa cevaplı sorularda yalnızca sonucu yazmayın; <strong>gerekçenizi de bir cümleyle ekleyin.</strong> Gerekçe istenen yerde gerekçesiz cevap tam puan almaz."
+        </div>
+        <div class="subtabs">
+          <button class="subtab active" onclick="renderWritten('all', this)">Tümü (16)</button>
+          <button class="subtab" onclick="renderWritten('short', this)">Kısa Cevaplı (12)</button>
+          <button class="subtab" onclick="renderWritten('case', this)">Büyük Senaryo / Vaka (4)</button>
+        </div>
+        <div id="writtenList"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. 20 SORULUK DENEME SINAVI ==================== -->
+    <section id="sec-exam" class="section">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2>🏆 20 Soruluk Gerçekçi Ara Sınav Provası</h2>
+            <p class="muted" style="margin:0;">6 haftadan dengeli seçilmiş 20 soru. Bitirince haftalık karne görür ve yanlışlarını tek tıkla Tekrar Motoruna gönderebilirsin!</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn primary" onclick="startMockExam()">🔄 Yeni 20 Soruluk Sınav Başlat</button>
+          </div>
+        </div>
+      </div>
+      <div id="examContainer"></div>
+    </section>
+
+    <!-- ==================== 8. SON 5 DK ÖZET ==================== -->
+    <section id="sec-cheatsheet" class="section">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <h2>⚡ Sınav Sabahı Son 5 Dakika Altın Özet Kartı</h2>
+          <button class="btn primary no-print" onclick="window.print()">🖨️ Yazdır / PDF Kaydet</button>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <h3>1) 6 Haftanın Tek Cümlelik Özü</h3>
+            <table>
+              <tr><th>H1</th><td><strong>Soyutlama</strong> (kolay nesne/dosya adı) + <strong>Kaynak Yönetimi</strong> (paylaşım: zamanda CPU/yazıcı, alanda RAM). Toplu / Etkileşimli / Gerçek zamanlı (süre sınırı!).</td></tr>
+              <tr><th>H2</th><td><strong>Sürücü</strong>=yazılım, <strong>Denetleyici</strong>=donanım. <strong>Sistem çağrısı</strong> (uygulama ister) vs <strong>Kesme</strong> (aygıt bildirir, hata değil!). Kullanıcı vs Çekirdek modu (yönetici hesabı ≠ çekirdek modu!). Monolitik (hızlı, hata yayılır) vs Mikroçekirdek (yalıtımlı, mesaj maliyeti).</td></tr>
+              <tr><th>H3</th><td><strong>Program</strong> (disk) vs <strong>Süreç</strong> (yürütülen + PID + PCB). Durumlar: Hazır / Çalışan / Bekleyen (<strong>Bekleyen → Hazır!</strong>). Thread ortak: adres alanı, kod, ortak veri, açık dosyalar; ayrı: PC, yazmaç, yığın, durum. Tek çekirdek = eşzamanlı, çok çekirdek = paralel.</td></tr>
+              <tr><th>H4</th><td><strong>Yarış durumu</strong> tek çekirdekte de olur! <strong>Kritik bölge</strong> = oku+kontrol+yaz tamamı! <strong>Mutex</strong> (atomik kilit, veri korur) vs <strong>Semafor</strong> (down/up, kapasite/koşul). Üretici-Tüketici: <strong>Koşul izni mutexten ÖNCE alınır!</strong></td></tr>
+              <tr><th>H5</th><td>T=C−V, R=İlkCPU−V, W=T−B. <strong>FCFS</strong> (konvoy/uzun iş kısa işi bekletir), <strong>SJF</strong> (ort. W min ama süre bilinmez + aç kalma), <strong>RR</strong> (en iyi R, küçük q → s/(q+s) maliyeti artar, büyük q → FCFS).</td></tr>
+              <tr><th>H6</th><td>Dosya ≠ RAM (4 MB JPEG → 36/108 MB). <strong>Dış parçalanma</strong> (otopark) → sayfalama çözer; <strong>İç parçalanma</strong> (son sayfa) kalır. Sayfa (sanal) ↔ Çerçeve (RAM), 4 KiB=4096 B, <strong>ofset değişmez</strong>! CPU düşük + RAM %96 + Disk %100 = <strong>Takas</strong> (RAM artır!). <strong>Sayfa hatası</strong> olağandır.</td></tr>
+            </table>
+          </div>
+
+          <div>
+            <h3>2) Formüller & Sayısal Kontroller</h3>
+            <div class="tip-box" style="margin-top:0;">
+              <strong>Zamanlama (Hafta 5):</strong><br>
+              • Toplam Kalış: <code>T = C − V</code><br>
+              • İlk Yanıt: <code>R = İlk CPU − V</code><br>
+              • Bekleme (G/Ç yoksa): <code>W = T − B</code><br>
+              • Yönetim Payı: <code>s / (q + s)</code><br>
+              • Ders A=8, B=4, C=2: FCFS(R=6,67 W=6,67 T=11,33) • SJF(R=2,67 W=2,67 T=7,33) • RR q=2(R=2 W=5,33 T=10). Hepsinde son bitiş = 14!
+            </div>
+            <div class="ok-box">
+              <strong>Bellek & Adres Çevirme (Hafta 6):</strong><br>
+              • <code>Sayfa No = ⌊Sanal / Sayfa Boyutu⌋</code><br>
+              • <code>Ofset = Sanal mod Sayfa Boyutu</code> (Değişmez!)<br>
+              • <code>Fiziksel Adres = Çerçeve × Sayfa Boyutu + Ofset</code><br>
+              • <code>1 KiB = 1024 bayt</code> • <code>4 KiB = 4096 bayt</code><br>
+              • Tuzak: <code>Sanal 4096</code> → Sayfa 1, Ofset 0 (Sayfa 0 değil!)
+            </div>
+            <h3>3) Tüm Kısaltmalar</h3>
+            <p style="font-size:13px;">
+              <strong>CPU</strong> (Merkezî İşlem Birimi) • <strong>RAM</strong> (Ana Bellek) • <strong>SSD</strong> (Katı Hâl Sürücüsü) • <strong>G/Ç (I/O)</strong> (Giriş/Çıkış) • <strong>API</strong> (Uygulama Programlama Arayüzü) • <strong>PID</strong> (Süreç Kimliği) • <strong>PCB</strong> (Süreç Kontrol Bloğu) • <strong>FCFS</strong> (İlk Gelen İlk Hizmet Alır) • <strong>SJF</strong> (En Kısa İş Önce) • <strong>RR</strong> (Dönüşümlü Zamanlama) • <strong>MMU</strong> (Bellek Yönetim Birimi) • <strong>KiB</strong> (1024 Bayt)
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<script>
+// ===================== DATA: 2-HOUR STUDY PLAN =====================
+const PLAN_BLOCKS = [
+  { id: 'b1', time: '00–15 dk', title: 'Blok 1: Hafta 1 & 2 Hızlı Tarama + Tuzak Kontrolü', desc: 'Soyutlama/kaynak yönetimi, sürücü/denetleyici, kesme/sistem çağrısı, kullanıcı/çekirdek modu ve monolitik/mikroçekirdek özetlerini oku.', actionText: 'Hafta 1–2 Özetine Git', action: () => { showTab('notes', document.querySelectorAll('.nav-btn')[1]); showNoteWeek(1, document.querySelectorAll('#noteTabs .subtab')[0]); } },
+  { id: 'b2', time: '15–35 dk', title: 'Blok 2: Hafta 3 & 4 + Canlı Durum & Yarış Simülatörleri', desc: '3 süreç durumu, thread ortak/ayrı tablosu, Stok=1 yarış durumu vs mutex animasyonu ve üretici-tüketici kuralını kavra.', actionText: 'Hafta 3–4 Simülatörüne Git', action: () => { showTab('notes', document.querySelectorAll('.nav-btn')[1]); showNoteWeek(3, document.querySelectorAll('#noteTabs .subtab')[2]); } },
+  { id: 'b3', time: '35–60 dk', title: 'Blok 3: Hafta 5 & 6 Hesaplama Atölyesi (Hesap Makinesiz!)', desc: 'FCFS/SJF/RR çizelgelerini elle çöz, s/(q+s) yönetim payını gör, 1000 ve 4096 sayfa boyutuyla en az 5 adres çevir.', actionText: 'Hesaplama Atölyesini Aç', action: () => showTab('calc', document.querySelectorAll('.nav-btn')[3]) },
+  { id: 'b4', time: '60–90 dk', title: 'Blok 4: 66 Soruluk Tekrarlı Öğrenme Maratonu (En Kritik 30 Dk!)', desc: 'Akıllı Tekrar Motorunda tüm soruları çöz. Yanlış yaptıkların 3 soru sonra tekrar gelecek; Tekrar Kuyruğunu 0 yapana kadar devam et!', actionText: 'Tekrarlı Test Motorunu Aç', action: () => showTab('quiz', document.querySelectorAll('.nav-btn')[2]) },
+  { id: 'b5', time: '90–105 dk', title: 'Blok 5: Aktif Hatırlama Kartları & Gerekçeli Kısa Cevaplar', desc: 'Kısaltma/terim kartlarını çevir, ardından K1–K3 ve büyük vaka sorularında gerekçe yazma refleksini geliştir.', actionText: 'Yazma Stüdyosunu Aç', action: () => showTab('written', document.querySelectorAll('.nav-btn')[5]) },
+  { id: 'b6', time: '105–120 dk', title: 'Blok 6: 20 Soruluk Final Deneme Sınavı + Son 5 Dk Özet', desc: 'Gerçek sınav modunda 20 soruyu çöz, zayıf haftanı gör, kalan 5 dakikada Son 5 Dk Altın Özeti gözden geçir!', actionText: 'Final Denemesini Başlat', action: () => showTab('exam', document.querySelectorAll('.nav-btn')[6]) }
+];
+
+// ===================== DATA: 66 QUESTIONS (WITH SPIRAL REPETITION & TRAPS) =====================
+const QUESTIONS = [
+  // --- HAFTA 1 (11 soru) ---
+  { id: 1, week: 1, trap: false, q: "Aşağıdakilerden hangisi işletim sisteminin KAYNAK YÖNETİMİ görevine örnektir?", opts: ["Kullanıcının belgeyi 'Tez.docx' adıyla kaydetmesi", "İki programın yazıcıya gönderdiği belgelerin karışmadan sırayla basılması", "Hesap tablosunda formülün sonucunun hesaplanması", "Masaüstü arka planının değiştirilmesi", "Tarayıcıda yeni sekme açılması"], ans: 1, exp: "Ortak tek yazıcının farklı işler arasında sırayla düzenlenmesi kaynak yönetimidir. Belgeyi adıyla kaydetmek (A) ise donanım ayrıntısını gizleyen soyutlama örneğidir." },
+  { id: 2, week: 1, trap: false, q: "Bir çalışanın satış raporunu diskin hangi fiziksel bloklarında durduğunu bilmeden sadece 'rapor.pdf' adıyla açabilmesi işletim sisteminin hangi temel görevidir?", opts: ["Kaynak yönetimi", "Soyutlama", "Bağlam değiştirme", "Zamanda paylaşım", "Yoklama"], ans: 1, exp: "Soyutlama, karmaşık donanım ayrıntıları yerine uygulamaya kullanışlı nesneler (dosya adı, okuma/yazma) sunar." },
+  { id: 3, week: 1, trap: false, q: "Bir işletim sisteminde çalışan uygulamalar RAM ve CPU kaynaklarını nasıl paylaşır?", opts: ["RAM'i zamanda, CPU'yu alanda paylaşır", "Her ikisini de yalnızca zamanda paylaşır", "RAM'i alanda, CPU'yu zamanda paylaşır", "Her ikisini de yalnızca alanda paylaşır", "Sadece toplu iş sistemlerinde paylaşım yapılır"], ans: 2, exp: "Alanda paylaşım kaynağın bölümlerinin farklı işlere ayrılmasıdır (RAM). Zamanda paylaşım ise kaynağın sırayla kullanılmasıdır (CPU, tek yazıcı). İkisi aynı sistemde birlikte bulunur!" },
+  { id: 4, week: 1, trap: true, q: "[TUZAK / D-Y] 'Bir sistemin gerçek zamanlı (real-time) sayılması için tek ölçüt ortalama hızının çok yüksek olmasıdır.' Bu ifade hakkında hangisi doğrudur?", opts: ["Doğru; en hızlı işlemcili bilgisayar gerçek zamanlı sistemdir.", "Yanlış; belirleyici ölçüt ortalama hız değil, tanımlanmış zaman sınırına (son tarihe) uyma zorunluluğudur.", "Doğru; etkileşimli sistemler hızlandıkça gerçek zamanlı olur.", "Yanlış; gerçek zamanlı sistemler yalnızca toplu iş çalıştırır.", "Doğru; yumuşak gerçek zamanlı sistemlerde son tarih yoktur."], ans: 1, exp: "SIK KARIŞTIRILAN! 'Hızlı sistem = gerçek zamanlı sistem' yanlıştır. Belirleyici olan tanımlanmış zaman sınırına uymaktır; geç gelen doğru sonuç işe yaramayabilir." },
+  { id: 5, week: 1, trap: true, q: "[TUZAK / D-Y] 'Masaüstü ortamı işletim sisteminin tamamıdır.' İfadesi neden yanlıştır?", opts: ["Masaüstü bir donanım bileşenidir.", "Masaüstü yalnızca kullanıcının talebini ifade etmesini sağlayan kullanıcı arayüzüdür; işletim sistemi altta kaynak yönetimi ve soyutlama hizmetleri sunar.", "Masaüstü sadece Windows'ta bulunur.", "Masaüstü bir aygıt sürücüsüdür.", "İşletim sistemlerinde arayüz bulunmaz."], ans: 1, exp: "Ekranda gördüğümüz masaüstü veya komut arayüzü işletim sisteminin tamamı değildir; yalnızca arayüzdür. Aynı dosyaya fareyle de komutla da erişilebilir." },
+  { id: 6, week: 1, trap: false, q: "Bir bankada müşteri temsilcisinin ekrandan anlık hesap sorgulaması ile gece yarısı tüm hesapların faiz raporunun çıkarılması sırasıyla hangi çalışma biçimleridir?", opts: ["Toplu iş — Gerçek zamanlı", "Etkileşimli — Toplu iş", "Gerçek zamanlı — Etkileşimli", "Her ikisi de toplu iş", "Her ikisi de gerçek zamanlı"], ans: 1, exp: "Ekran başında kısa sürede yanıt beklenen iş etkileşimli; kullanıcı beklemeden belirli saatte arka arkaya yürütülen gece raporu toplu iştir. Aynı sistemde birlikte bulunabilirler!" },
+  { id: 7, week: 1, trap: false, q: "İşletim sistemlerinin tarihsel gelişiminde 'çoklu programlama' (multiprogramming) hangi temel ihtiyaca yanıt vermek için ortaya çıkmıştır?", opts: ["Grafik masaüstü arayüzü sunmak", "Bir iş G/Ç (giriş/çıkış) beklerken işlemcinin boş kalmayıp başka bir işe geçmesini sağlamak", "İnternet tarayıcılarını hızlandırmak", "Sadece tek kullanıcının oyun oynamasını sağlamak", "Disk boyutunu büyütmek"], ans: 1, exp: "Çoklu programlama, bir iş G/Ç beklerken CPU'nun başka bir işe geçmesini sağlayarak işlemcinin boş beklemesini önler." },
+  { id: 8, week: 1, trap: true, q: "Sert (hard) gerçek zamanlı sistem ile yumuşak (soft) gerçek zamanlı sistem arasındaki fark nedir?", opts: ["Sert sistemde masaüstü yoktur, yumuşakta vardır.", "Sert sistemde son tarihin kaçırılması kabul edilemez; yumuşak sistemde ara sıra gecikme yalnızca hizmet kalitesini düşürür.", "Yumuşak sistemde zaman sınırı kavramı hiç yoktur.", "Sert sistemler yalnızca ana bilgisayarlarda çalışır.", "İkisi arasında fark yoktur."], ans: 1, exp: "Sert gerçek zamanlı sistemlerde (örn. üretim hattı kritik kontrolü) son tarih kaçırılamaz; yumuşak gerçek zamanlı sistemlerde ara sıra gecikme kaliteyi düşürür ama sistem çökmez." },
+  { id: 9, week: 1, trap: false, q: "Aşağıdaki örneklerden hangisinde soyutlama ve kaynak yönetimi AYNI işlemde birlikte görülmektedir?", opts: ["İki sayıyı zihinden toplamak", "Raporu adıyla kaydederken (soyutlama) diske erişimin diğer işlerle karışmadan düzenlenmesi (kaynak yönetimi)", "Monitör kablosunu takmak", "Bilgisayarı fişten çekmek", "Klavye tuşlarını temizlemek"], ans: 1, exp: "Ders notunun doğrudan örneği: Raporu adıyla kaydetmek soyutlamadır; kaydetme sırasında diske erişimin düzenlenmesi ise kaynak yönetimidir." },
+  { id: 10, week: 1, trap: true, q: "Bir mağaza için işletim sistemi seçerken ürün adına (Windows/Linux vb.) karar vermeden ÖNCE hangi bilgi sorulmalıdır?", opts: ["Masaüstü duvar kağıdı seçenekleri", "Satış uygulaması ve fiş yazıcısının hangi işletim sistemlerini desteklediği (uyumluluk kanıtı)", "Bilgisayar kasasının rengi", "İşletim sisteminin çıkış yılı", "Sadece CPU saat hızı"], ans: 1, exp: "Hafta 1 Slayt 16: 'Ürün adından önce gereksinim ve uyumluluk kanıtı gerekir.' Satış uygulaması ve yazıcı desteği sorulmalıdır." },
+  { id: 11, week: 1, trap: true, q: "[TEKRAR AÇISI] Yazdırma kuyruğunda bekleyen belgelerin görülmesi tek başına ne anlama gelir?", opts: ["Yazıcı sürücüsü kesinlikle bozulmuştur.", "İşletim sistemi çökmüştür.", "Kuyrukta beklemek tek başına hata değildir; ortak kaynağa gelen istekler sıraya alınmış olabilir, aygıt ve kuyruk durumu incelenir.", "RAM tamamen yanmıştır.", "Kesme mekanizması bozulmuştur."], ans: 2, exp: "Hafta 1 Slayt 8: Kuyrukta beklemek tek başına hata değildir. Tek yazıcıya gelen farklı işlerin düzenli sıraya alınması normaldir." },
+
+  // --- HAFTA 2 (12 soru) ---
+  { id: 12, week: 2, trap: true, q: "Yönetici (Administrator) hesabıyla açılan bir uygulama için aşağıdakilerden hangisi DOĞRUDUR?", opts: ["Bütün kodu çekirdek modunda çalışır.", "Disk denetleyicisine doğrudan komut gönderebilir.", "Kodu yine kullanıcı modunda çalışır; korunan hizmetleri sistem çağrısıyla ister.", "Sistem çağrısı yapmasına gerek kalmaz.", "Donanım kesmelerini devre dışı bırakır."], ans: 2, exp: "ALTIN TUZAK! Hesap yetkisi erişim izinlerini, işlemci modu ise yürütme ayrıcalığını belirler. Yönetici hesabındaki uygulama bile kullanıcı modunda çalışır!" },
+  { id: 13, week: 2, trap: false, q: "Aygıt sürücüsü (driver) ile aygıt denetleyicisi (controller) arasındaki temel fark nedir?", opts: ["Sürücü donanım, denetleyici yazılımdır.", "Sürücü aygıt iletişimine katılan yazılım; denetleyici ise aygıtı kontrol eden donanımdır.", "İkisi de kullanıcı modundaki uygulamalardır.", "Sürücü sadece RAM'de, denetleyici sadece CPU yazmaçlarındadır.", "İkisi aynı kavramın farklı adlarıdır."], ans: 1, exp: "Hafta 2 Slayt 8: Sürücü YAZILIMDIR (örn. yazıcı sürücüsü), denetleyici DONANIMDIR (örn. depolama denetleyicisi)." },
+  { id: 14, week: 2, trap: true, q: "[TUZAK / D-Y] Donanım kesmesi (interrupt) ile ilgili hangisi DOĞRUDUR?", opts: ["Kesme her zaman bir sistem hatası veya bilgisayarın kapanması anlamına gelir.", "Kesme, uygulamanın çekirdekten hizmet istemek için başlattığı çağrıdır.", "Kesme, bir aygıtın veya zamanlayıcının ele alınması gereken bir olayı (örn. disk okumanın bittiğini) işlemciye bildirmesidir; hata demek değildir.", "Kesme yerine sürekli yoklama (polling) yapmak CPU'yu daha az yorar.", "Kesme sırasında işlemci kullanıcı modunda kalır."], ans: 2, exp: "Kesme kapı zili gibidir: aygıt/zamanlayıcı olay bildirir, hata demek değildir! Aygıtı sürekli tekrar tekrar kontrol etmeye ise yoklama (polling) denir." },
+  { id: 15, week: 2, trap: false, q: "Sistem çağrısı (system call) ile donanım kesmesi (hardware interrupt) arasındaki en temel fark nedir?", opts: ["Sistem çağrısını uygulama başlatır ('şu hizmeti yap'); donanım kesmesini aygıt/zamanlayıcı başlatır ('şu olay gerçekleşti').", "Sadece sistem çağrısı çekirdek kodunu çalıştırır, kesme çalıştırmaz.", "Sistem çağrısı yalnızca hata olduğunda oluşur.", "Kesme yalnızca kullanıcı şifresi yanlış girildiğinde oluşur.", "Sistem çağrısı donanım, kesme yazılımdır."], ans: 0, exp: "İkisi de çekirdek kodunu çalıştırabilir ama başlangıç nedenleri farklıdır: Sistem çağrısı = Uygulama hizmet ister; Donanım kesmesi = Aygıt/zamanlayıcı olay bildirir." },
+  { id: 16, week: 2, trap: true, q: "[TUZAK] Bir uygulamanın iki sayıyı toplaması sırasında ne olur?", opts: ["Çekirdek moduna geçilir ve sistem çağrısı yapılır.", "Donanım kesmesi üretilir.", "Kullanıcı modunda biter; her işlev çağrısı sistem çağrısı değildir.", "Disk denetleyicisi devreye girer.", "Yönetici hesabı gerekir."], ans: 2, exp: "Her işlev çağrısı sistem çağrısı değildir! Korunan donanım/kaynak gerektirmeyen iki sayıyı toplama gibi işlemler tamamen kullanıcı modunda biter." },
+  { id: 17, week: 2, trap: true, q: "[TUZAK] Bir raporu açma ve okuma sürecinde aşağıdakilerden hangisi YANLIŞTIR?", opts: ["Açma isteği başarılı olursa uygulamaya sonraki işlemler için bir tanıtıcı döndürülür.", "Dosyayı açmak, içeriğinin tamamının hemen RAM'e okunması demektir.", "Çekirdek dosya yolunu ve erişim iznini denetler; izin yoksa erişim reddi hatası döner.", "Veri dosya önbelleğindeyse fiziksel diske yeniden gidilmeyebilir.", "Disk okumasını tamamladığında denetleyici bunu kesmeyle bildirebilir."], ans: 1, exp: "SIK KARIŞTIRILAN! Dosya açmak ile içeriğini okumak ayrı adımlardır; dosya açmak tüm içeriği mutlaka RAM'e getirmez. Ayrıca her okuma diske gitmez (önbellek!)." },
+  { id: 18, week: 2, trap: false, q: "Monolitik yapı ile mikroçekirdek mimarisi karşılaştırıldığında hangisi DOĞRUDUR?", opts: ["Monolitikte sürücüler ayrı kullanıcı süreçlerindedir.", "Mikroçekirdekte bir sürücü hatası bütün çekirdeği çökertir.", "Monolitikte hizmetler çekirdek içindedir (iletişim kısa ama hata yayılabilir); mikroçekirdekte bazı hizmetler ayrı kullanıcı süreçlerindedir (hata yalıtılır ama mesajlaşma adımları artar).", "Mikroçekirdek her zaman monolitikten daha hızlıdır.", "Monolitik yapılarda sistem çağrısı yoktur."], ans: 2, exp: "Hafta 2 Slayt 16: Temel ödünleşim: Monolitik = kısa çekirdek içi çağrı / geniş hata etkisi; Mikroçekirdek = yüksek hata yalıtımı / süreçler arası mesajlaşma maliyeti." },
+  { id: 19, week: 2, trap: false, q: "İşlemcinin (CPU) temel komut işleme çevrimi ve içindeki çok hızlı küçük çalışma alanları aşağıdakilerden hangisinde doğru verilmiştir?", opts: ["Aç — Oku — Kapat / SSD", "Getir — Çöz — Yürüt / Yazmaçlar (Registers)", "Kilitle — Yaz — Bırak / Sayfa Tablosu", "Yokla — Bekle — Bitir / Denetleyici", "Derle — Bağla — Yükle / Önbellek"], ans: 1, exp: "CPU komutları Getir, Çöz ve Yürüt adımlarıyla işler. Yazmaçlar (registers) CPU içindeki küçük ve çok hızlı çalışma alanlarıdır." },
+  { id: 20, week: 2, trap: false, q: "Çalışma masası benzetmesinde (Hafta 2 Slayt 7) 'hesap yapan kişi', 'çalışma masası' ve 'dosya dolabı' sırasıyla neleri temsil eder?", opts: ["RAM — CPU — SSD", "CPU — RAM — Depolama (SSD/HDD)", "Denetleyici — Sürücü — Çekirdek", "Çekirdek — Uygulama — Önbellek", "CPU — Depolama — RAM"], ans: 1, exp: "Hesap yapan kişi = CPU, çalışma masası = RAM (geçici, aktif veri), dosya dolabı = Depolama (kalıcı saklama). Daha büyük dosya dolabı (SSD) daha geniş masa (RAM) demek değildir!" },
+  { id: 21, week: 2, trap: true, q: "[TEKRAR AÇISI] Bir uygulama 'rapor.csv' dosyasını açmak istediğinde 'Erişim Reddi' hatası alıyor. Daha hızlı bir CPU takmak bu sorunu çözer mi?", opts: ["Evet, hızlı CPU izinleri otomatik aşar.", "Hayır; bu bir donanım hızı değil, çekirdeğin uyguladığı erişim izni / koruma mekanizması sonucudur.", "Evet, kullanıcı modunu çekirdek moduna çevirir.", "Hayır, SSD kapasitesini artırmak gerekir.", "Evet, önbellek büyüyünce izin gerekmez."], ans: 1, exp: "Hafta 2 Slayt 14: Erişim reddi hatası koruma mekanizmasının çalıştığını gösterir; daha hızlı CPU erişim izni sorununu çözmez." },
+  { id: 22, week: 2, trap: true, q: "[TEKRAR AÇISI] Mikroçekirdek kullanan bir sistemde yazıcı sürücüsü çöktüğünde ne beklenir?", opts: ["Tüm işletim sistemi çekirdeği anında çöker.", "Sürücü ayrı bir kullanıcı sürecinde çalıştığı için hata büyük ölçüde o süreçle sınırlı kalır ve sürücü yeniden başlatılabilir.", "Diskteki tüm dosyalar silinir.", "CPU kullanıcı modundan çıkamaz.", "Sistem otomatik olarak monolitik yapıya dönüşür."], ans: 1, exp: "Çalışma Notu K3: Mikroçekirdekte sürücü çekirdek dışında ayrı bir kullanıcı sürecindedir; hata yalıtılır ve yeniden başlatılabilir." },
+  { id: 23, week: 2, trap: false, q: "Uygulamaların donanıma doğrudan erişemeyip çekirdek üzerinden (sistem çağrısı ile) erişmesinin sağladığı İKİ temel yarar nedir?", opts: ["Daha ucuz donanım ve daha büyük ekran", "Koruma (başkasının verisini/diski bozmama) ve düzenli kaynak yönetimi (erişim sırası ve iznini çekirdeğin belirlemesi)", "Daha büyük SSD ve daha az elektrik", "Yalnızca daha hızlı toplama işlemi ve masaüstü teması", "Sürücüye gerek kalmaması ve kesmelerin kalkması"], ans: 1, exp: "Çalışma Notu Hafta 2: Bu sınır iki şeyi sağlar: (1) Koruma, (2) Düzenli kaynak yönetimi." },
+
+  // --- HAFTA 3 (11 soru) ---
+  { id: 24, week: 3, trap: false, q: "Aynı süreçteki iki iş parçacığı (thread) için aşağıdakilerden hangisi ORTAKTIR?", opts: ["Program sayacı", "Yazmaçlar", "Sürecin adres alanı ve açık dosyaları", "Yığın (Stack)", "Yürütme durumu"], ans: 2, exp: "Çalışma Notu Örnek Soru 3: Adres alanı, kod, ortak veriler ve açık dosyalar süreçte ORTAKTIR. Program sayacı, yazmaçlar, yığın ve yürütme durumu her iş parçacığında AYRIDIR." },
+  { id: 25, week: 3, trap: true, q: "[TUZAK / D-Y] Disk okumasını bekleyen ('Bekleyen' durumdaki) bir süreç, okuma tamamlandığında (donanım kesmesi geldiğinde) DOĞRUDAN hangi duruma geçer?", opts: ["Doğrudan Çalışan duruma geçer.", "Önce Hazır duruma geçer; CPU'yu alması zamanlayıcının ayrı bir kararıdır.", "Sonlanmış duruma geçer.", "Yeni duruma döner.", "Bekleyen durumda kalmaya devam eder."], ans: 1, exp: "EN BÜYÜK SINAV TUZAKLARINDAN! Bekleyen → Çalışan doğrudan geçişi YOKTUR! Olay tamamlanınca süreç Hazır olur; zamanlayıcı seçerse Çalışan olur." },
+  { id: 26, week: 3, trap: true, q: "[TUZAK / D-Y] 'Ekranda bir uygulamanın iki penceresi açıksa, işletim sisteminde kesinlikle iki ayrı süreç (process) vardır.' Bu ifade doğru mudur?", opts: ["Doğru; her pencere mutlaka ayrı bir PID'ye sahip süreçtir.", "Yanlış; pencere sayısı süreç sayısını kanıtlamaz, bir uygulama birden fazla pencereyi tek süreçte yönetebilir.", "Doğru; her sekme de ayrı bir çekirdektir.", "Yanlış; pencereler programdır, süreç değildir.", "Doğru; yalnızca tek çekirdekli sistemlerde geçerlidir."], ans: 1, exp: "Hafta 3 Slayt 15: Pencere sayısı süreç sayısını kanıtlamaz! Öte yandan aynı program bağımsız olarak iki kez başlatılırsa 1 program ve 2 süreç vardır." },
+  { id: 27, week: 3, trap: false, q: "İşlemci A sürecinden B sürecine geçerken A'nın program sayacını, yazmaçlarını ve yığın konumunu saklayıp B'ninkini yükler. Bu işleme ve süreç bilgilerinin tutulduğu kayda sırasıyla ne denir?", opts: ["Sayfa hatası — MMU", "Bağlam değiştirme (Context switch) — Süreç Kontrol Bloğu (PCB)", "Takas — Sayfa tablosu", "Yoklama — Sürücü", "Semafor — Mutex"], ans: 1, exp: "Bağlam değiştirme sayesinde süreç tekrar CPU aldığında baştan değil kaldığı yerden devam eder. Her sürecin kimlik, durum, zamanlama, bellek ve dosya bilgisi PCB'de tutulur." },
+  { id: 28, week: 3, trap: false, q: "Tek çekirdekli bir bilgisayarda müzik uygulaması bir iş parçacığıyla şarkı çalarken diğer iş parçacığıyla internetten çalma listesi indiriyor. Bu iki iş parçacığı nasıl çalışır?", opts: ["Paralel çalışır; ikisi gerçekten aynı anda CPU kullanır.", "Eşzamanlı çalışır; tek çekirdekte CPU sırayla paylaşılır ve herhangi bir anda yalnızca biri çalışır.", "Toplu iş modunda çalışır.", "Aynı anda ikisi de sadece bekleyen durumdadır.", "Bağlam değiştirme hiç yapılmaz."], ans: 1, exp: "Çalışma Notu Uygulama (b): Tek çekirdekte işler sırayla paylaşılır -> EŞZAMANLILIK (Concurrency). Paralellik için birden fazla çekirdek gerekir!" },
+  { id: 29, week: 3, trap: true, q: "[TUZAK] Çalışan durumdaki bir sürecin zaman dilimi (quantum) dolduğunda hangi duruma geçer?", opts: ["Bekleyen", "Hazır", "Sonlanmış", "Yeni", "Takas"], ans: 1, exp: "Süreç G/Ç istemedi, çalışmaya hâlâ uygun; sadece süresi dolduğu için CPU başka sürece verildi -> Çalışan → Hazır!" },
+  { id: 30, week: 3, trap: true, q: "Bir satış raporu 40 saniyede tamamlanıyor ancak sistem genelinde CPU kullanımı yalnızca %8 görünüyor. Bu gözlem için en doğru yorum hangisidir?", opts: ["Kesinlikle işlemci arızalıdır, hemen yeni CPU alınmalıdır.", "Süreç büyük olasılıkla ağ, disk veya uzak sunucu bekliyordur; ancak bu tek başına kesin kanıt değildir, ek ölçüm gerekir.", "Uygulamada kesinlikle 8 iş parçacığı vardır.", "Rapor 40 saniyenin tamamında Çalışan durumundadır.", "Program bellekte yer bulamıyor demektir."], ans: 1, exp: "Hafta 3 Slayt 13–14: Geçen süre ≠ CPU'da geçirilen süre. Düşük CPU + yavaş rapor G/Ç veya uzak sunucu beklemesine işaret edebilir ama tek başına kesin kanıt değildir; gidiş-dönüş süresi ve sunucu kayıtları gibi ek ölçüm istenir!" },
+  { id: 31, week: 3, trap: true, q: "[TUZAK] 'Bir uygulamaya ne kadar çok iş parçacığı (thread) eklersek işlem o kadar hızlı biter.' Neden YANLIŞTIR?", opts: ["İş parçacıkları aynı adres alanını paylaşamaz.", "İşin bölünebilirliği, çekirdek sayısı, ortak kaynak beklemeleri (kilitler/kuyruklar) ve yönetim maliyeti performansı sınırlar.", "İşletim sistemi en fazla 2 iş parçacığına izin verir.", "İş parçacıkları sadece diskte çalışır.", "Çok iş parçacığı arayüzü dondurur."], ans: 1, exp: "Hafta 3 Slayt 12: Daha fazla iş parçacığı her zaman hızlandırmaz. Ayrıca arayüzün yanıt vermesi ile raporun erken bitmesi farklı hedeflerdir!" },
+  { id: 32, week: 3, trap: false, q: "Bekleyen (blocked) durumdaki bir süreç için hangisi DOĞRUDUR?", opts: ["CPU o anda tamamen boş olsa bile çalışamaz; beklediği olay tamamlanana kadar ilerleyemez.", "CPU boşsa zamanlayıcı onu hemen çalıştırır.", "Hazır kuyruğunun en başında bekler.", "PCB kaydı silinmiştir.", "Program sayacı sıfırlanır."], ans: 0, exp: "Bekleyen süreç bir olay (disk, ağ, klavye, kilit) gerçekleşmeden ilerleyemez; CPU boş olsa bile hazır kuyrukta olmadığı için seçilemez!" },
+  { id: 33, week: 3, trap: true, q: "[TEKRAR AÇISI] Aynı süreçteki iki iş parçacığının ayrı yığınlara (stack) sahip olması ne anlama GELMEZ?", opts: ["Kendi yerel çağrı konumlarını tutabilirler.", "Ayrı koruma alanlarına sahip oldukları anlamına GELMEZ; yığınlar aynı süreç adres alanındadır, birinin hatalı yazması diğerini etkileyebilir.", "Program sayaçları ayrıdır.", "Yazmaç durumları ayrıdır.", "Yürütme durumları ayrıdır."], ans: 1, exp: "Hafta 3 Slayt 10 ince notu: 'Yığınlar aynı süreç adres alanındadır. Ayrı yığın, ayrı koruma alanı anlamına gelmez.' 4. haftanın eşgüdüm konusu bu yüzden gereklidir!" },
+  { id: 34, week: 3, trap: false, q: "Program ile süreç (process) arasındaki temel fark nedir?", opts: ["Program RAM'de, süreç sadece CPU'dadır.", "Program komutların diskte duran pasif tanımıdır; süreç ise bu programın yürütülmekte olan örneğidir (durumu, kaynakları ve PID'si ile).", "İkisi tamamen aynıdır.", "Süreç tek bir komuttur, program dosyaların toplamıdır.", "Programın PID'si vardır, sürecin yoktur."], ans: 1, exp: "Program = diskteki statik tanım (raporlama uygulaması dosyası). Süreç = yürütülen aktif örnek (bugünün raporunu hazırlayan iş, PID ile ayırt edilir)." },
+
+  // --- HAFTA 4 (12 soru) ---
+  { id: 35, week: 4, trap: true, q: "İki iş ortak bir sayacı kilit dışında okuyor, yalnızca yeni değeri yazarken aynı kilidi sırayla alıyor. Hangisi DOĞRUDUR?", opts: ["Yarış durumu tamamen önlenir.", "Yalnızca çok çekirdekte hata olur.", "İkisi de eski değere göre karar verebilir; kritik bölge okumadan önce başlamalıdır.", "Sorun semafor kullanılınca kendiliğinden çözülür.", "Hata ancak elektrik kesilirse oluşur."], ans: 2, exp: "Çalışma Notu Örnek Soru 4: Yalnızca yazmayı kilitlemek yetmez! A ve B ikisi de kilit dışında 1 okuyup, sonra sırayla 0 yazıp iki satışı da onaylar. Kritik bölge okuma+kontrol+güncelleme adımlarının TAMAMIDIR." },
+  { id: 36, week: 4, trap: true, q: "Mutex bırakıldığında onu bekleyen iş için hangisi DOĞRUDUR?", opts: ["Hemen çalışan duruma geçer.", "Sonlanmış duruma geçer.", "Baştan başlar.", "İlerleyebilir (hazır) hâle gelir; ama CPU'yu alması zamanlayıcının kararına bağlıdır.", "Yeniden kilit beklemesine gerek kalmadan kritik bölgeyi ikinci kez kullanır."], ans: 3, exp: "Çalışma Notu Örnek Soru 5: Hem 3. hem 4. hem 5. haftayı bağlayan soru! Kilidin bırakılması işi Hazır yapar; CPU ataması zamanlayıcının ayrı bir kararıdır." },
+  { id: 37, week: 4, trap: true, q: "[TUZAK / D-Y] 'Tek çekirdekli bir bilgisayarda aynı anda iki iş çalışamayacağı için yarış durumu (race condition) oluşmaz.' Hangisi doğrudur?", opts: ["Doğru; yarış durumu sadece çok çekirdekli işlemcilerde olur.", "Yanlış; tek çekirdekte de işletim sistemi A'nın okuması ile yazması arasında bağlam değiştirip B'yi çalıştırabilir, adımlar iç içe geçer.", "Doğru; tek çekirdekte mutex gerekmez.", "Yanlış; yarış durumu sadece disk doluyken olur.", "Doğru; çünkü tek çekirdekte iş parçacığı olmaz."], ans: 1, exp: "KLASİK SINAV TUZAĞI! Tek çekirdek yarış durumu için yeterlidir: A stoku okur (1) → bağlam değişir → B stoku okur (1) → ikisi de 0 yazar ve çift satış olur!" },
+  { id: 38, week: 4, trap: true, q: "Stok=1 örneğinde iki kasayı korumak için aşağıdakilerden hangisi GÜVENCE SAĞLAR?", opts: ["İki satış arasına 1 saniye gecikme koymak", "Her kasa için ayrı bir kilit (mutex A ve mutex B) kullanmak", "Sadece yazma adımını kilitlemek", "Okuma, kontrol ve güncelleme adımlarının tamamını her iki işin kullandığı TEK VE ORTAK bir mutex içine almak", "Programı 5 kez test edip hata çıkmadığını görmek"], ans: 3, exp: "Hafta 4 Slayt 10: Gecikme koymak, sadece yazmayı kilitlemek, ayrı kilit kullanmak veya birkaç başarılı deneme ASLA güvence sağlamaz. Tüm ilgili işler aynı ortak kilidi kullanmalı!" },
+  { id: 39, week: 4, trap: false, q: "Üretici–tüketici (sınırlı tampon) probleminde tamponu koruyan mutex ile koşul izni (boş yer / hazır kayıt semaforu) hangi sırayla alınmalıdır ve NEDEN?", opts: ["Önce mutex, sonra semafor; çünkü daha hızlıdır.", "Önce koşul izni (semafor down), sonra mutex; çünkü kilidi tutarak beklemek diğer tarafın koşulu sağlamasını engeller.", "Sıra hiç önemli değildir.", "Yalnızca mutex yeterlidir, semafora gerek yoktur.", "Yalnızca tek semafor yeterlidir."], ans: 1, exp: "ALTIN KURAL (Hafta 4 Slayt 14): Koşul izni mutexten ÖNCE alınır! Eğer üretici önce kilidi alıp sonra tampon dolu diye beklerse, tüketici kilidi alamayacağı için kayıt çıkaramaz ve sistem kilitlenir!" },
+  { id: 40, week: 4, trap: true, q: "3 izinli bir semafor ile mutex arasındaki temel fark nedir?", opts: ["İkisi tamamen aynı amaçla kullanılır.", "3 izinli semafor aynı anda 3 işin kaynağa girmesini (kapasite) yönetir ama tek stok kaydının güvenli güncellenmesini tek başına sağlamaz; mutex ise ortak kritik bölgede aynı anda en fazla 1 iş olmasını sağlar.", "Mutex izin sayar, semafor sadece tek iş alır.", "Semafor sadece donanımdır, mutex yazılımdır.", "Mutex'i başka bir iş bırakır, semaforu sadece alan bırakır."], ans: 1, exp: "Hafta 4 Slayt 13: Mutex ortak veriyi/kritik bölgeyi korur ve kilidi edinen bırakır. Semafor izin/olay sayısını yönetir (down/up) ve başka iş izin/olay bildirebilir." },
+  { id: 41, week: 4, trap: false, q: "İyi bir karşılıklı dışlama çözümünün 4 koşulundan biri AŞAĞIDAKİLERDEN HANGİSİ DEĞİLDİR?", opts: ["Aynı kritik bölgede aynı anda en fazla bir iş bulunur.", "Çözüm CPU sayısına ya da işlerin çalışma hızına güvenmez.", "Kritik bölge dışındaki bir iş başkalarının girişini engellemez.", "Hiçbir iş giriş için sonsuza kadar beklemez.", "Kritik bölgedeki iş mutlaka en kısa süren iş olmalıdır."], ans: 4, exp: "Hafta 4 Slayt 11'deki 4 koşul: (1) Karşılıklı dışlama, (2) Hız/CPU sayısına güvenmeme, (3) Bölge dışındayken engellememe, (4) Sonsuz beklemeyi önleme." },
+  { id: 42, week: 4, trap: false, q: "Kilidi kontrol etme ve edinme işleminin 'atomik' olması ne anlama gelir?", opts: ["İşlemin sadece çok çekirdekte çalışması", "İşlemin diğer ilgili işlere göre bölünemez (arasına başka iş giremez) olması", "İşlemin 1 saniyeden uzun sürmesi", "İşlemin kullanıcı tarafından elle onaylanması", "Kilidin hiç bırakılmaması"], ans: 1, exp: "Atomik = bölünemez. Sıradan bir 'kilit boş mu bak, sonra 1 yap' kontrolü arasına başka iş girebileceği için yetmez; kilit edinme atomik olmalıdır." },
+  { id: 43, week: 4, trap: false, q: "Siparişin hazırlama birimine iletilmesi ile sipariş oluşmadan hazırlamaya başlanmaması sırasıyla hangi kavramlardır?", opts: ["Eşgüdüm — İletişim", "İletişim — Eşgüdüm", "Mutex — Monitor", "Soyutlama — Sayfalama", "Kesme — Yoklama"], ans: 1, exp: "Çalışma Notu Hafta 4 girişi: Veri/haber alışverişi İLETİŞİM; güvenli erişim ve doğru sıranın korunması EŞGÜDÜMDÜR." },
+  { id: 44, week: 4, trap: true, q: "Farklı fiziksel makinelerdeki iki kasa bilgisayarı ortak stoktaki son ürünü satıyor. Hangisi DOĞRUDUR?", opts: ["Kasalardan birindeki yerel mutex her iki kasayı otomatik korur.", "Tek bilgisayardaki mutex ayrı makineleri korumaz; ortak sunucuda eşgüdüm veya mesaj geçişiyle sıralı/korumalı işleme gerekir.", "Ayrı makinelerde yarış durumu oluşmaz.", "Mesaj geçişi kullanılınca hiçbir sıra kuralına gerek kalmaz.", "Her makinede 3 izinli semafor açmak yeterlidir."], ans: 1, exp: "Hafta 4 Sık Karıştırılan + Slayt 16: Ayrı makinelerdeki kasalar tek PC'deki mutex ile korunmaz; ortak sunucuda eşgüdüm gerekir. Ayrıca mesaj kullanmak tek başına güvence değildir, işleyen taraf sırayla/korumalı çalışmalıdır!" },
+  { id: 45, week: 4, trap: false, q: "Klasik 'Monitor' yapısı için aşağıdakilerden hangisi DOĞRUDUR?", opts: ["Ortak veriyi ve ona erişen yordamları tek yapıda toplar; klasik modelde bir anda yalnızca bir iş monitor içinde çalışır.", "Aynı anda sınırsız sayıda iş monitor içinde ortak veriyi değiştirir.", "Sadece disk okuma işlemlerinde kullanılır.", "Monitor içinde koşul beklenirken kilit bırakılmaz.", "Monitor bir donanım denetleyicisidir."], ans: 0, exp: "Hafta 4 Slayt 15: Monitor ortak veri + erişen yordamları tek yapıda toplar; bir anda tek iş yürür; koşul sağlanmadıysa diğer işlere ilerleme olanağı vererek bekler." },
+  { id: 46, week: 4, trap: false, q: "[TEKRAR AÇISI] Stok satış örneğinde aşağıdakilerden hangisi kritik bölgenin DIŞINDA tutulmalıdır?", opts: ["Stok değerini okumak", "Stokun yeterli olup olmadığını kontrol etmek", "Stoku 1 azaltıp kararı kaydetmek", "Ürün seçme ekranı ve uzun fiş hazırlama işlemi", "Hiçbiri; programın tamamı kilitlenmelidir"], ans: 3, exp: "Hafta 4 Slayt 7: Kritik bölge sadece ortak stoka erişen okuma, kontrol ve güncelleme adımlarıdır. Ürün seçme ekranı ve uzun fiş hazırlama dışındadır!" },
+
+  // --- HAFTA 5 (10 soru) ---
+  { id: 47, week: 5, trap: true, q: "Kesmesiz SJF kullanan bir sistemde uzun bir iş çalışırken çok kısa bir iş gelirse ne olur?", opts: ["Uzun iş hemen durdurulur.", "Kısa iş reddedilir.", "Uzun iş bitene kadar sürer; kısa iş bir sonraki seçimde değerlendirilir.", "İki iş aynı anda aynı çekirdekte çalışır.", "Zaman dilimi dolunca uzun iş kuyruğun sonuna gider."], ans: 2, exp: "Çalışma Notu Örnek Soru 6: Kesmesiz (nonpreemptive) yöntemde çalışan iş zorla durdurulmaz! E seçeneği Round Robin'i anlatır." },
+  { id: 48, week: 5, trap: false, q: "A = 8, B = 4, C = 2 birim CPU ihtiyacı olan üç iş t = 0'da hazır (başlangıç sırası A, B, C). FCFS, SJF ve Round Robin (q = 2) yöntemlerinde hangisi doğrudur?", opts: ["En düşük ortalama bekleme FCFS'dedir.", "Üç yöntemde de son iş 14'te biter; ortalama beklemede SJF (2,67), ortalama ilk yanıtta Round Robin (2) en iyidir.", "Round Robin'de son iş 20'de biter.", "SJF'de A'nın bekleme süresi FCFS'den daha düşüktür.", "FCFS'de C'nin ilk yanıt süresi 2'dir."], ans: 1, exp: "Dersin ortak örneği! Toplam iş 8+4+2=14 olduğu için hepsi 14'te biter. Ort. W: SJF 2,67 < RR 5,33 < FCFS 6,67. Ort. R: RR 2 < SJF 2,67 < FCFS 6,67!" },
+  { id: 49, week: 5, trap: true, q: "[TUZAK / D-Y] 'Round Robin'de zaman dilimi (q) ne kadar küçük seçilirse sistem performansı o kadar iyileşir.' Neden YANLIŞTIR?", opts: ["q küçülünce FCFS gibi davranır.", "Her geçişte bağlam değiştirme maliyeti ödenir; q çok küçülürse yönetim payı s/(q+s) büyür ve CPU asıl iş yerine geçişe zaman harcar.", "q küçülünce ilk yanıt süresi uzar.", "q küçülünce kesmesiz zamanlama olur.", "q en az 100 olmak zorundadır."], ans: 1, exp: "Hafta 5 Slayt 20: s=0,2 iken q=1'de yönetim payı %16,7'ye çıkar! q çok küçükse geçiş maliyeti artar; q çok büyükse FCFS gibi davranır." },
+  { id: 50, week: 5, trap: true, q: "[TUZAK / D-Y] 'Bir zamanlama algoritmasında ortalama bekleme süresi azalıyorsa her iş mutlaka daha az bekler.' Hangisi bu iddiayı ÇÜRÜTÜR?", opts: ["FCFS'de A'nın beklemesi 0 iken SJF'de ortalama bekleme 6,67'den 2,67'ye düşmesine rağmen A'nın beklemesi 0'dan 6'ya çıkar.", "Round Robin'de herkes aynı anda biter.", "FCFS'de tüm işler 0 bekler.", "SJF her işin beklemesini sıfırlar.", "Böyle bir durum matematiksel olarak imkânsızdır."], ans: 0, exp: "Hafta 5 Slayt 13 & 23: Ortalamanın iyileşmesi her bireysel işin kazandığı anlamına gelmez! SJF'de ortalama düşer ama uzun iş A 0'dan 6'ya çıkar." },
+  { id: 51, week: 5, trap: true, q: "[TUZAK] 'Erken CPU alan iş mutlaka erken biter.' İfadesi neden yanlıştır?", opts: ["FCFS'de ilk giren son çıkar.", "Round Robin (q=2) örneğinde A işinin ilk CPU alma anı 0'dır ama bitiş zamanı 14'tür (en son biter); ilk yanıt (R) ile tamamlanma (C) farklıdır.", "SJF'de kısa iş en son biter.", "İlk CPU alma anı daima bitiş anına eşittir.", "Zamanlayıcı işleri bitirmez."], ans: 1, exp: "Hafta 5 Slayt 17 & 23: A 0'da başlar ama 14'te biter; C 4'te başlar ama 6'da biter! Erken ilk yanıt ≠ erken tamamlanma!" },
+  { id: 52, week: 5, trap: false, q: "Bir işin varış anı V = 3, ilk CPU alma anı = 5, tamamlanma anı C = 9 ve CPU ihtiyacı B = 4 (G/Ç yok). Bu işin R, T ve W değerleri sırasıyla kaçtır?", opts: ["R = 2, T = 6, W = 2", "R = 5, T = 9, W = 4", "R = 2, T = 9, W = 5", "R = 3, T = 6, W = 4", "R = 4, T = 6, W = 2"], ans: 0, exp: "Hafta 5 Slayt 7'nin birebir örneği! R = 5 − 3 = 2; T = 9 − 3 = 6; W = T − B = 6 − 4 = 2." },
+  { id: 53, week: 5, trap: false, q: "SJF (Shortest Job First) yönteminin en önemli İKİ zayıf yanı nedir?", opts: ["Çok fazla bağlam değiştirme yapması ve adaletsiz olması", "CPU sürelerinin önceden bilinmeyip tahmin edilmesi ve sürekli kısa iş gelirse uzun işin aç kalabilmesi (starvation)", "Sadece etkileşimli sistemlerde çalışması ve çok karmaşık olması", "Zaman dilimi seçiminin zor olması ve FCFS'ye dönüşmesi", "G/Ç işlerini hiç kabul etmemesi"], ans: 1, exp: "Hafta 5 Slayt 14: (1) Süreler önceden bilinmez, tahmin edilir; (2) Sürekli kısa iş gelirse uzun işler aç kalabilir (starvation); (3) Kesmesiz SJF çalışan işi durdurmaz." },
+  { id: 54, week: 5, trap: false, q: "Round Robin (q = 2) ile çalışan bir sistemde sırada olan F işinin yalnızca 1 birimlik CPU ihtiyacı var. 1 birim sonra F bittiğinde ne olur?", opts: ["CPU 1 birim boş bekler, q = 2 dolana kadar başka işe geçmez.", "Kullanılmayan zaman diliminin dolması beklenmez; F kuyruktan ayrılır ve hemen sıradaki hazır işe geçilir.", "F kuyruğun sonuna geri eklenir.", "Sistem FCFS'ye geçer.", "Bağlam değiştirme yapılmaz."], ans: 1, exp: "Hafta 5 Slayt 15: İş biterse veya beklemeye geçerse kullanılmayan zaman diliminin dolması beklenmez!" },
+  { id: 55, week: 5, trap: true, q: "Zamanlamada 'adalet' (fairness) ne anlama gelir?", opts: ["Tüm işlerin aynı saniyede tamamlanması", "Tüm işlerin kesinlikle eşit süre beklemesi", "Karşılaştırılabilir (benzer) işlerin makul çalışma fırsatı bulması ve hiçbir işin sonsuza kadar beklememesi (aç kalmaması)", "En uzun işin her zaman ilk sırada çalışması", "CPU kullanımının her zaman %100 olması"], ans: 2, exp: "Hafta 5 Slayt 21: Adalet herkesin aynı anda bitmesi değil, benzer işlerin düzenli/makul fırsat bulması ve aç kalmanın önlenmesidir." },
+  { id: 56, week: 5, trap: true, q: "[TEKRAR AÇISI] 'G/Ç beklemek ile hazır kuyrukta beklemek aynı şeydir.' Bu ifade neden YANLIŞTIR?", opts: ["İkisi de aynı kuyruktadır.", "Hazırda bekleyen iş çalışmaya uygundur sadece CPU sırası bekler; G/Ç bekleyen iş ise olay/veri tamamlanmadan ilerleyemez ve zamanlayıcının seçimine katılmaz.", "G/Ç bekleyen iş CPU'yu kullanır.", "Hazırda bekleyen iş sadece toplu işlerde olur.", "İkisi arasında fark yoktur."], ans: 1, exp: "Hafta 5 Slayt 4 & 23: Zamanlayıcı yalnızca HAZIR kuyruktan seçer. G/Ç bekleyen iş (Bekleyen durum) olay gerçekleşene kadar hazır kuyruğun parçası değildir!" },
+
+  // --- HAFTA 6 (10 soru) ---
+  { id: 57, week: 6, trap: true, q: "Sayfa (page) ve çerçeve (page frame) ile ilgili hangisi DOĞRUDUR?", opts: ["Sayfa RAM'deki yer, çerçeve uygulamanın parçasıdır.", "Sayfa ve çerçeve aynı büyüklüktedir; adres çevrilirken ofset değişmez.", "Çerçeve numarası doğrudan fiziksel adrestir.", "Her uygulama aynı sayfa tablosunu kullanır.", "Sayfalama iç parçalanmayı tamamen ortadan kaldırır."], ans: 1, exp: "Çalışma Notu Örnek Soru 7: Sayfa=sanal parça, Çerçeve=RAM'deki yer, boyutları eşittir (yaygın: 4 KiB=4096 B) ve ofset aynen taşınır! Sayfalama DIŞ parçalanmayı kaldırır, son sayfada İÇ parçalanma kalır." },
+  { id: 58, week: 6, trap: true, q: "Sayfa hatası (page fault) ile ilgili hangisi DOĞRUDUR?", opts: ["Her zaman programın hatalı yazıldığını gösterir.", "Bilgisayarın yeniden başlatılmasını gerektirir.", "Yalnızca disk dolu olduğunda oluşur.", "Sayfa tablosunun silinmesine yol açar.", "Gereken sayfa RAM'de değildir; işletim sistemi onu diskten getirir, tabloyu günceller ve erişim yeniden denenir."], ans: 4, exp: "Çalışma Notu Örnek Soru 8: Adı 'hata' olsa da çoğunlukla olağandır! 4 adım: MMU OS'ye bildirir → OS boş çerçeve bulur diskten okur → sayfa tablosunu günceller → erişim yeniden denenir." },
+  { id: 59, week: 6, trap: false, q: "Sayfa boyutu 4096 bayt (4 KiB) ve sayfa tablosu (0→5, 1→2, 2→7) olsun. Sanal 5000 adresi hangi fiziksel adrese çevrilir?", opts: ["5000", "2904", "9096", "21384", "8192"], ans: 2, exp: "5000 = 1 × 4096 + 904 → Sayfa 1, Ofset 904. Tablodan Sayfa 1 → Çerçeve 2. Fiziksel = 2 × 4096 + 904 = 8192 + 904 = 9096!" },
+  { id: 60, week: 6, trap: true, q: "[TUZAK — SLAYT 14] Sayfa boyutu 4096 bayt iken sanal '4096' adresi hangi sayfa ve ofsette yer alır?", opts: ["Sayfa 0, Ofset 4096", "Sayfa 1, Ofset 0 (Sayfa 1'in ilk baytıdır!)", "Sayfa 0, Ofset 0", "Sayfa 4, Ofset 96", "Geçersiz adrestir"], ans: 1, exp: "SLAYT 14 TUZAĞI! Sayfa 0 yalnızca 0–4095 arasındaki 4096 bayttır. 4096 = 1 × 4096 + 0 olduğundan Sayfa 1'in ilk baytıdır (ofset her zaman sayfa boyutundan küçüktür!)." },
+  { id: 61, week: 6, trap: false, q: "12 yerlik otoparkta 6 yer boş olmasına rağmen boşluklar 2, 3 ve 1 yerlik dağınık parçalar hâlinde olduğu için yan yana 4 yer isteyen otobüs sığmıyor. Bu durum ve çözümü nedir?", opts: ["İç parçalanma — Takas", "Dış parçalanma — Sayfalama (belleği eşit parçalara bölme)", "Sayfa hatası — Yeni CPU", "Yarış durumu — Mutex", "Aç kalma — Round Robin"], ans: 1, exp: "Hafta 6 Slayt 9–10: Toplam boş alan yeterli ama dağınık = DIŞ PARÇALANMA. Sayfalama (otobüs yerine minibüsler) dış parçalanmayı ortadan kaldırır!" },
+  { id: 62, week: 6, trap: false, q: "Sayfa boyutunun 4 KiB olduğu bir sistemde 10 KiB'lık veri için kaç sayfa ayrılır ve ne kadar İÇ PARÇALANMA oluşur?", opts: ["2 sayfa, 2 KiB dış parçalanma", "3 sayfa (12 KiB), son sayfada 2 KiB iç parçalanma", "3 sayfa (12 KiB), 0 KiB parçalanma", "4 sayfa (16 KiB), 6 KiB iç parçalanma", "10 sayfa, 0 KiB parçalanma"], ans: 1, exp: "10 KiB için 3 × 4 KiB = 12 KiB ayrılır. Son sayfanın yarısı (2 KiB) boş kalır -> İç parçalanma (yarım dolu minibüs!)." },
+  { id: 63, week: 6, trap: true, q: "Bilgisayar çok yavaşlıyor. Görev Yöneticisi'nde CPU %15, Bellek %96, Disk %100 görünüyor. Ne oluyor ve ne önerilmelidir?", opts: ["İşlemci yetersiz; hemen daha hızlı CPU alınmalıdır.", "RAM yetmiyor; işletim sistemi sık takas (swapping) ve sayfa hatası yapıyor, CPU diski beklediği için boşta görünüyor. RAM eklenmeli veya açık uygulamalar azaltılmalıdır.", "Disk dolmuş; dosya sıkıştırma yapılmalıdır.", "Yarış durumu oluşmuştur; mutex eklenmelidir.", "Monolitik çekirdek çökmüştür."], ans: 1, exp: "Çalışma Notu Uygulama (d) & Slayt 16: 'Önce ölçün, sonra yatırım yapın!' CPU düşük + RAM %90+ + Disk %100 = Takas darboğazı! Yeni CPU çözmez!" },
+  { id: 64, week: 6, trap: false, q: "Fotoğraf ve Müzik uygulamalarının İKİSİ DE sanal 5000 adresini kullanıyor. Birbirinin verisini neden bozmazlar?", opts: ["Çünkü biri sabah diğeri akşam çalışır.", "Her uygulamanın kendi sayfa tablosu vardır; aynı sanal adres MMU tarafından RAM'de farklı fiziksel çerçevelere çevrilir.", "Çünkü aynı fiziksel adresi paylaşmaları sorun yaratmaz.", "Sanal adresler yalnızca diskte kullanılır.", "Müzik uygulaması sanal adres kullanmaz."], ans: 1, exp: "Hafta 6 Slayt 15: Fotoğraf'ta sayfa 1 → çerçeve 2 (9096), Müzik'te sayfa 1 → çerçeve 6 (25480). Otelde iki aile de '1. odamız' der ama resepsiyon farklı odalara götürür!" },
+  { id: 65, week: 6, trap: true, q: "[TUZAK] Diskte 4 MB yer kaplayan 12 megapiksellik bir JPEG fotoğraf, düzenleyicide açılıp filtre ve geri alma kopyası tutulduğunda neden RAM'de 108 MB kaplayabilir?", opts: ["RAM baytları disk baytlarından daha küçüktür.", "Diskte sıkıştırılmış olan JPEG RAM'de her piksel ayrı tutularak açılır (12M × 3B = 36 MB); özgün + filtre + geri alma kopyası ile 3 × 36 = 108 MB olur.", "Sayfa tablosu 104 MB yer kaplar.", "Takas dosyası fotoğrafı 27 kez kopyalar.", "MMU fotoğrafı sıkıştıramadığı için hata verir."], ans: 1, exp: "Hafta 6 Slayt 6: Dosya boyutu ≠ RAM boyutu! Ve kaydetmeden kapatılırsa RAM'deki değişiklik kaybolur." },
+  { id: 66, week: 6, trap: true, q: "[TEKRAR AÇISI] 'Takas (swapping) dosyayı kalıcı olarak kaydetmek veya yedeklemek demektir.' İfadesi doğru mudur?", opts: ["Doğru; takas edilen veriler otomatik yedeklenir.", "Yanlış; takas yalnızca RAM yetmediğinde yer açmak için bazı verilerin geçici olarak diske taşınmasıdır, kaydetme/yedekleme değildir.", "Doğru; elektrik kesilse bile takastaki çalışma aynen kalır.", "Yanlış; takas sadece CPU yazmaçları arasında yapılır.", "Doğru; takas SSD kapasitesini artırır."], ans: 1, exp: "Hafta 6 Slayt 16: 'Takas, dosyayı kaydetmek ya da yedeklemek değildir; yalnızca RAM'de yer açar.'" }
+];
+
+// ===================== DATA: FLASHCARDS (42) =====================
+const FLASHCARDS = [
+  // Abbr (12)
+  { cat: 'abbr', tag: 'Kısaltma', f: 'CPU', b: '<strong>Central Processing Unit</strong> — Merkezî İşlem Birimi (İşlemci). Komutları getirir, çözer ve yürütür.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'RAM', b: '<strong>Random Access Memory</strong> — Ana Bellek. Çalışan programların komut ve verilerini geçici tutar (güç kesilince silinir).' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'SSD', b: '<strong>Solid State Drive</strong> — Katı Hâl Sürücüsü. Kalıcı depolama; RAM\'den çok yavaştır.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'G/Ç (I/O)', b: '<strong>Input/Output</strong> — Giriş/Çıkış. Aygıtlarla veri alışverişi.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'API', b: '<strong>Application Programming Interface</strong> — Uygulama Programlama Arayüzü. Uygulamalar sistem çağrılarına çoğu zaman API üzerinden ulaşır.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'PID', b: '<strong>Process Identifier</strong> — Süreç Kimliği. İşletim sisteminin her süreci ayırt ettiği sayısal kimlik.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'PCB', b: '<strong>Process Control Block</strong> — Süreç Kontrol Bloğu. Süreç tablosunda kimlik, durum, zamanlama, bellek ve dosya ilişkilerini tutan kayıt.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'FCFS', b: '<strong>First Come, First Served</strong> — İlk Gelen İlk Hizmet Alır (Kesmesiz zamanlama).' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'SJF', b: '<strong>Shortest Job First</strong> — En Kısa İş Önce (Derste kesmesiz; ortalama W\'yi minimize eder ama aç kalma riski var).' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'RR', b: '<strong>Round Robin</strong> — Dönüşümlü (Sıralı) Zamanlama. Kesmeli; her işe en fazla q zaman dilimi verir.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'MMU', b: '<strong>Memory Management Unit</strong> — Bellek Yönetim Birimi. İşlemcideki donanım; sayfa tablosuyla sanal adresi fiziksel adrese çevirir.' },
+  { cat: 'abbr', tag: 'Kısaltma', f: 'KiB', b: '<strong>Kibibyte</strong> — Kibibayt (1024 bayt). 4 KiB = 4096 bayt (yaygın sayfa boyutu).' },
+
+  // TR-EN Terms (16)
+  { cat: 'terms', tag: 'Terim • H1', f: 'Soyutlama / Kaynak Yönetimi', b: '<strong>Abstraction / Resource Management</strong>' },
+  { cat: 'terms', tag: 'Terim • H1', f: 'Toplu iş / Etkileşimli / Gerçek zamanlı', b: '<strong>Batch / Interactive / Real-time</strong>' },
+  { cat: 'terms', tag: 'Terim • H2', f: 'Kesme / Yoklama', b: '<strong>Interrupt / Polling</strong> (Kapı zili vs kapıyı sürekli kontrol etmek)' },
+  { cat: 'terms', tag: 'Terim • H2', f: 'Kullanıcı modu / Çekirdek modu', b: '<strong>User mode / Kernel mode</strong>' },
+  { cat: 'terms', tag: 'Terim • H2', f: 'Sistem çağrısı', b: '<strong>System call</strong> — Uygulamanın çekirdekten kontrollü hizmet istemesi.' },
+  { cat: 'terms', tag: 'Terim • H2', f: 'Monolitik yapı / Mikroçekirdek', b: '<strong>Monolithic system / Microkernel</strong>' },
+  { cat: 'terms', tag: 'Terim • H3', f: 'Süreç / İş parçacığı', b: '<strong>Process / Thread</strong>' },
+  { cat: 'terms', tag: 'Terim • H3', f: 'Hazır / Çalışan / Bekleyen', b: '<strong>Ready / Running / Blocked</strong>' },
+  { cat: 'terms', tag: 'Terim • H3, H5', f: 'Bağlam değiştirme', b: '<strong>Context switch</strong> — Program sayacı, yazmaç ve yığın konumunu saklayıp diğerini yükleme.' },
+  { cat: 'terms', tag: 'Terim • H3', f: 'Eşzamanlılık / Paralellik', b: '<strong>Concurrency / Parallelism</strong>' },
+  { cat: 'terms', tag: 'Terim • H4', f: 'Yarış durumu / Kritik bölge / Karşılıklı dışlama', b: '<strong>Race condition / Critical region / Mutual exclusion</strong>' },
+  { cat: 'terms', tag: 'Terim • H4', f: 'Üretici–tüketici / Tampon / Mesaj geçişi', b: '<strong>Producer–consumer / Buffer / Message passing</strong>' },
+  { cat: 'terms', tag: 'Terim • H5', f: 'Kesmesiz / Kesmeli zamanlama', b: '<strong>Nonpreemptive / Preemptive scheduling</strong>' },
+  { cat: 'terms', tag: 'Terim • H5', f: 'Zaman dilimi / Aç kalma', b: '<strong>Quantum / Starvation</strong>' },
+  { cat: 'terms', tag: 'Terim • H6', f: 'Dış parçalanma / İç parçalanma', b: '<strong>External / Internal fragmentation</strong>' },
+  { cat: 'terms', tag: 'Terim • H6', f: 'Sayfa / Çerçeve / Takas / Sayfa hatası', b: '<strong>Page / Page frame / Swapping / Page fault</strong>' },
+
+  // Concepts & Analogies (14)
+  { cat: 'concepts', tag: 'Benzetme • H2', f: 'Kapı zili neyi temsil eder?', b: '<strong>Donanım kesmesi (Interrupt)</strong>. Kapıyı sürekli açıp bakmak ise <strong>Yoklama (Polling)</strong>.' },
+  { cat: 'concepts', tag: 'Benzetme • H2', f: 'Çalışma masası benzetmesinde CPU, RAM ve Disk nedir?', b: 'Hesap yapan kişi = <strong>CPU</strong>, Çalışma masası = <strong>RAM</strong>, Dosya dolabı = <strong>Depolama (SSD/HDD)</strong>.' },
+  { cat: 'concepts', tag: 'Benzetme • H6', f: 'Mutfak benzetmesinde Aşçı, Tezgâh ve Kiler nedir?', b: 'Aşçı = <strong>CPU</strong>, Tezgâh = <strong>RAM</strong>, Kiler = <strong>Disk/SSD</strong>, Numaralı kaplar = <strong>Bayt & Adres</strong>.' },
+  { cat: 'concepts', tag: 'Benzetme • H6', f: 'Otel resepsiyonu benzetmesinde Bellek Yöneticisinin 3 görevi nedir?', b: '1) <strong>Yer ayır</strong>, 2) <strong>Kaydı tut</strong> (kim hangi odada), 3) <strong>Erişimi koru</strong> (anahtar kart başka odayı açmaz).' },
+  { cat: 'concepts', tag: 'Benzetme • H6', f: 'Otoparkta 6 boş yer var ama 4 yerlik otobüs sığmıyor! Çözüm minibüsler. Hangi iki kavram?', b: 'Otobüs sığmaması = <strong>Dış parçalanma</strong>. Minibüslere bölmek = <strong>Sayfalama</strong>. Yarım dolu son minibüs = <strong>İç parçalanma</strong>!' },
+  { cat: 'concepts', tag: 'H3 • Kritik Tablo', f: 'Aynı süreçteki iş parçacıklarında ORTAK ve AYRI olanlar nelerdir?', b: '<strong>ORTAK:</strong> Adres alanı, program kodu, ortak veriler, açık dosyalar.<br><strong>AYRI:</strong> Program sayacı, yazmaçlar, yığın (stack), yürütme durumu.' },
+  { cat: 'concepts', tag: 'H3 • Kritik Kural', f: 'Süreç durum diyagramındaki 4 geçerli geçiş hangileridir?', b: '1) Hazır → Çalışan (seçildi)<br>2) Çalışan → Bekleyen (G/Ç istedi)<br>3) Bekleyen → Hazır (olay bitti/kesme)<br>4) Çalışan → Hazır (zaman dilimi doldu)<br><em>(Bekleyen → Çalışan YOKTUR!)</em>' },
+  { cat: 'concepts', tag: 'H4 • 4 Koşul', f: 'İyi bir karşılıklı dışlama çözümünün 4 koşulu nedir?', b: '1) Aynı anda en fazla 1 iş kritik bölgede<br>2) CPU sayısına/hıza güvenmeme<br>3) Bölge dışındaki iş engellemez<br>4) Sonsuz bekleme (starvation) olmaz.' },
+  { cat: 'concepts', tag: 'H4 • Altın Kural', f: 'Üretici–Tüketici probleminde hangi 3 eşgüdüm aracı kullanılır ve sıra kuralı nedir?', b: '2 Semafor (<strong>boş yer</strong> + <strong>hazır kayıt</strong>) ve 1 <strong>mutex</strong>.<br>KURAL: <strong>Koşul izni (semafor down) mutexten ÖNCE alınır!</strong>' },
+  { cat: 'concepts', tag: 'H4 • Kısa Yollar', f: 'Neden "gecikme koymak", "sadece yazmayı kilitlemek" ve "ayrı kilit vermek" yarış durumunu çözmez?', b: '• Gecikme: İşlem sırası yine değişebilir.<br>• Sadece yazma: İki iş eski okunan değere göre karar verir.<br>• Ayrı kilit: Farklı kilitler birbirini dışlamaz.' },
+  { cat: 'concepts', tag: 'H5 • Formüller', f: 'Zamanlamadaki 3 ölçü (T, R, W) nasıl hesaplanır?', b: '• Toplam kalış: <strong>T = C − V</strong><br>• İlk yanıt: <strong>R = İlk CPU − V</strong><br>• Hazırda bekleme (G/Ç yoksa): <strong>W = T − B</strong>' },
+  { cat: 'concepts', tag: 'H5 • Zaman Dilimi', f: 'Round Robin\'de q çok küçükse ve q çok büyükse ne olur?', b: '• q çok küçükse → <strong>Bağlam değiştirme maliyeti s/(q+s) artar</strong>.<br>• q çok büyükse → <strong>FCFS gibi davranır</strong>.' },
+  { cat: 'concepts', tag: 'H6 • Sayfa Hatası', f: 'Sayfa hatası (Page Fault) gerçekleştiğinde izlenen 4 adım nedir?', b: '1) MMU çeviremez, OS\'ye bildirir.<br>2) OS RAM\'de boş çerçeve bulur, sayfayı diskten okur.<br>3) Sayfa tablosunu günceller.<br>4) Erişim yeniden denenir ve başarılı olur.' },
+  { cat: 'concepts', tag: 'H6 • Sanal Adres', f: 'Sanal ve fiziksel adres ayrımının 3 yararı nedir?', b: '1) <strong>Koruma</strong> (başkasının verisine erişilemez)<br>2) <strong>Kolaylık</strong> (program RAM\'de nereye yükleneceğini bilmek zorunda değil)<br>3) <strong>Esneklik</strong> (OS veriyi taşıyıp sadece tabloyu günceller).' }
+];
+
+// ===================== DATA: WRITTEN & CASE QUESTIONS (16) =====================
+const WRITTEN_QS = [
+  { id: 'K1', type: 'short', week: 'Hafta 2 (Resmî Örnek K1)', q: 'Bir müzik uygulaması diskteki bir şarkıyı açıp okuyor. Bu işlemde sistem çağrısının ve donanım kesmesinin nerede ortaya çıktığını birer cümleyle açıklayın.', model: 'Uygulama dosyayı açmak ve okumak için <strong>sistem çağrısı</strong> yapar; bu, uygulamanın çekirdekten hizmet istemesidir. Disk okumayı bitirince denetleyici bunu <strong>donanım kesmesi</strong> ile bildirir; bu, aygıtın bir olayı haber vermesidir.', checklist: ['Sistem çağrısının uygulama tarafından başlatıldığını yazdım', 'Donanım kesmesinin disk/denetleyici tarafından olay bildirimi olarak yapıldığını yazdım'] },
+  { id: 'K2', type: 'short', week: 'Hafta 4 (Resmî Örnek K2)', q: 'Bir otel rezervasyon sitesinde son boş oda için iki müşteri aynı anda "Rezerve et" düğmesine basıyor ve ikisi de onay alıyor. Sorunun adını, kritik bölgeyi ve çözümü yazın.', model: 'Sorun: <strong>Yarış durumu (race condition)</strong>. <strong>Kritik bölge:</strong> Odanın boş olup olmadığını okuma, kontrol etme ve odayı müşteriye yazma adımlarının tamamıdır. <strong>Çözüm:</strong> Bu adımlar aynı ortak <strong>mutex</strong> ile korunmalıdır; ilk müşteri kilidi alıp odayı ayırır ve bırakır, ikinci müşteri kilidi alınca odayı dolu görür ve onay almaz.', checklist: ['Sorunun adını (yarış durumu) yazdım', 'Kritik bölgenin okuma + kontrol + yazma tamamı olduğunu belirttim', 'Aynı ortak mutex ile koruma ve ikinci müşterinin yeniden okuması gerekçesini yazdım'] },
+  { id: 'K3', type: 'short', week: 'Hafta 2 (Resmî Örnek K3)', q: 'Bir yazıcı sürücüsünde hata oluştu. Bu hatanın etkisini monolitik yapıda ve mikroçekirdekte karşılaştırın.', model: '<strong>Monolitik yapıda</strong> sürücü çekirdek içinde çalıştığı için hata bütün çekirdeği/sistemi etkileyebilir. <strong>Mikroçekirdekte</strong> sürücü ayrı bir kullanıcı süreci olduğundan hata büyük ölçüde o süreçle sınırlı kalır ve sürücü yeniden başlatılabilir; ancak bunun bedeli süreçler arası mesajlaşmanın getirdiği ek iletişim adımlarıdır.', checklist: ['Monolitikte hatanın tüm çekirdeği etkileyebileceğini yazdım', 'Mikroçekirdekte yalıtıldığını ve yeniden başlatılabileceğini yazdım', 'Mikroçekirdeğin bedelinin ek mesajlaşma/iletişim adımları olduğunu ekledim'] },
+  { id: 'K4', type: 'short', week: 'Hafta 1', q: 'Bir mağazada satış ekranından ürün aranırken gece de otomatik satış raporu hazırlanıyor. Bu iki iş hangi çalışma biçimleridir? Aynı sistemde bulunabilirler mi? Gerekçelendirin.', model: 'Kasada ürün arama kullanıcı ekran başında kısa sürede yanıt beklediği için <strong>etkileşimli</strong>, gece raporu kullanıcı beklemeden belirli saatte yürütüldüğü için <strong>toplu iştir</strong>. Aynı sistemde birlikte bulunabilirler; bir işletmenin bütün işleri tek çalışma biçiminde olmak zorunda değildir.', checklist: ['Etkileşimli ve toplu iş ayrımını gerekçesiyle yazdım', 'Aynı sistemde birlikte bulunabileceklerini belirttim'] },
+  { id: 'K5', type: 'short', week: 'Hafta 1', q: 'Dosya adıyla kaydetme ve ortak yazıcı kullanımı örneklerinde soyutlama mı, kaynak yönetimi mi öne çıkıyor? Birer cümleyle gerekçelendirin.', model: 'Dosya adıyla kaydetmede <strong>soyutlama</strong> öne çıkar; çünkü kullanıcı/uygulama diskin fiziksel bloklarıyla uğraşmadan kolay bir nesne (dosya adı) kullanır. Ortak yazıcı kullanımında <strong>kaynak yönetimi</strong> öne çıkar; çünkü tek yazıcıya gelen farklı işlerin karışmadan sırayla basılması düzenlenir.', checklist: ['Dosya adıyla kaydetme → soyutlama gerekçesini yazdım', 'Ortak yazıcı → kaynak yönetimi gerekçesini yazdım'] },
+  { id: 'K6', type: 'short', week: 'Hafta 2', q: 'Yönetici hesabıyla çalıştırılan bir uygulama neden çekirdek modunda çalışmaz? İki kavram arasındaki farkı bir cümleyle açıklayın.', model: 'Yönetici hesabı kullanıcıya tanınan <strong>erişim izinlerini</strong> belirler; çekirdek modu ise işlemcinin <strong>yürütme ayrıcalığını</strong> anlatır. Yönetici hesabındaki uygulama kodu yine kullanıcı modunda çalışır ve korunan hizmetleri sistem çağrısıyla çekirdekten ister.', checklist: ['Hesap yetkisi = erişim izni, mod = işlemci yürütme ayrıcalığı ayrımını yazdım', 'Uygulamanın kullanıcı modunda kalıp sistem çağrısı yaptığını ekledim'] },
+  { id: 'K7', type: 'short', week: 'Hafta 3 (Slayt 18 Etkinlik)', q: 'Disk okuması bitti ama CPU henüz atanmadı. Sürecin durumu nedir? CPU atanırsa ne değişir? Gerekçenizi bir cümleyle yazın.', model: 'Durumu <strong>Hazır (Ready)</strong> olur; çünkü beklediği G/Ç olayı tamamlandığı için artık çalışmaya uygundur ancak CPU sırasını beklemektedir. Zamanlayıcı CPU\'yu atadığında durumu <strong>Çalışan (Running)</strong> olur ve bağlam yüklenerek kaldığı yerden komut yürütmeye devam eder.', checklist: ['Bekleyen → Hazır geçişini yazdım (doğrudan çalışan olmadığını belirttim)', 'CPU atanınca Hazır → Çalışan olduğunu açıkladım'] },
+  { id: 'K8', type: 'short', week: 'Hafta 4', q: 'Üretici–tüketici probleminde üretici neden önce "boş yer" semaforundan izin alıp SONRA mutex kilidini almalıdır?', model: 'Eğer üretici önce mutex kilidini alıp ardından tampon dolu olduğu için beklemeye geçerse, tüketici tamponu boşaltmak için mutex kilidine giremez. Kilidi tutarak beklemek diğer tarafın koşulu sağlamasını engeller (kilitlenme oluşur); bu yüzden koşul izni her zaman mutexten önce alınır.', checklist: ['Kilidi tutarak beklemenin tüketiciyi engelleyeceğini açıkladım', 'Koşul izninin mutexten önce alınması gerektiğini yazdım'] },
+  { id: 'K9', type: 'short', week: 'Hafta 4', q: '3 izinli bir semafor neden ortak stok değişkenini iki kasanın eşzamanlı güncellemesine karşı tek başına koruyamaz?', model: '3 izinli semafor aynı anda 3 işin kaynağa girmesine izin vererek <strong>kapasiteyi</strong> sınırlar; oysa stok güncellemesi bir anda en fazla 1 işin girmesini (karşılıklı dışlama) gerektirir. İki kasa aynı anda izin alıp eski stoku okuyabilir; veri koruması için ortak <strong>mutex</strong> gerekir.', checklist: ['Semaforun 3 işe birden izin verdiğini (kapasite) yazdım', 'Stok için aynı anda en fazla 1 iş (mutex / karşılıklı dışlama) gerektiğini belirttim'] },
+  { id: 'K10', type: 'short', week: 'Hafta 5 (Slayt 26 Etkinlik)', q: 'A=8, B=4, C=2 örneğinde A\'nın CPU ihtiyacı 8\'den 12\'ye çıksa, B ilk CPU\'yu ne zaman alır? FCFS ve Round Robin (q = 2) için gerekçelendirin.', model: '<strong>FCFS</strong> kesmesiz olduğu için A bitene kadar çalışır; bu nedenle B ilk CPU\'yu 8 yerine <strong>12\'de</strong> alır. <strong>Round Robin (q = 2)</strong> kesmelidir ve A en fazla 2 birim çalıştıktan sonra kuyruk sonuna gider; bu nedenle B ilk CPU\'yu yine <strong>2\'de</strong> alır (etkilenmez!).', checklist: ['FCFS\'de kesmesiz olduğu için 12\'de aldığını yazdım', 'RR (q=2)\'de kesmeli olduğu için yine 2\'de aldığını gerekçelendirdim'] },
+  { id: 'K11', type: 'short', week: 'Hafta 5', q: 'Round Robin\'de zaman dilimi (q) çok küçük ve çok büyük seçilirse ne tür sorunlar ortaya çıkar? Birer cümleyle açıklayın.', model: '<strong>q çok küçükse</strong> çok sık bağlam değiştirme yapılır ve yönetim payı s/(q+s) büyüyerek CPU zamanının önemli kısmı geçişlere harcanır. <strong>q çok büyükse</strong> işler dilim dolmadan biter ve yöntem <strong>FCFS gibi davranarak</strong> etkileşimli hızlı ilk yanıt avantajını kaybeder.', checklist: ['Küçük q → bağlam değiştirme maliyeti artar yazdım', 'Büyük q → FCFS gibi davranır yazdım'] },
+  { id: 'K12', type: 'short', week: 'Hafta 6', q: 'İki farklı uygulama aynı anda sanal 5000 adresini kullanırsa neden birbirinin verisini bozmaz? Ayrıca adres çevirisinde ofset neden değişmez?', model: 'Her uygulamanın <strong>kendi sayfa tablosu</strong> vardır; MMU aynı sanal adresi farklı fiziksel çerçevelere çevirir (koruma). <strong>Ofset değişmez</strong> çünkü sanal sayfa ile RAM\'deki fiziksel çerçeve aynı büyüklüktedir (örn. 4096 bayt); sayfa içindeki konum çerçeve içinde de aynıdır.', checklist: ['Her uygulamanın kendi sayfa tablosu ve farklı çerçeveye gitmesi gerekçesini yazdım', 'Sayfa ve çerçevenin eşit boyutlu olmasından dolayı ofsetin değişmediğini yazdım'] },
+
+  // --- BÜYÜK SENARYO / VAKA SORULARI (4) ---
+  { id: 'V1', type: 'case', week: 'Resmî Uygulama Sorusu (H3+H4+H6)', q: 'Bir müzik uygulaması şarkı çalarken aynı anda çalma listesini internetten indiriyor. İki iş parçacığı var: biri sesi çalıyor, diğeri indirmeyi yapıyor. Bilgisayar tek çekirdekli.\n\na) İndirme yapan iş parçacığı sunucunun yanıtını beklerken hangi durumdadır? Yanıt geldiğinde hangi duruma geçer?\nb) Bu iki iş parçacığı eşzamanlı mı yoksa paralel mi çalışır? Neden?\nc) İki iş parçacığı da çalma listesine şarkı ekleyebiliyor. Hangi sorun ortaya çıkabilir ve nasıl önlenir?\nd) Bilgisayar çok yavaşlıyor. Görev Yöneticisi\'nde CPU %15, Bellek %96, Disk %100 görünüyor. Ne olduğunu ve ne önereceğinizi açıklayın.', model: '<strong>a)</strong> Sunucu yanıtını beklerken <strong>Bekleyen</strong> durumdadır. Yanıt gelince <strong>Hazır</strong> duruma geçer; CPU\'yu zamanlayıcı verdiğinde Çalışan olur.<br><strong>b)</strong> <strong>Eşzamanlı</strong> çalışır: tek çekirdekte CPU aralarında sırayla paylaşılır ve herhangi bir anda yalnızca biri çalışır. (Çok çekirdekte paralel çalışabilirlerdi.)<br><strong>c)</strong> Çalma listesi ortak veridir; aynı anda güncellenirse bir ekleme kaybolabilir (<strong>yarış durumu</strong>). Listeyi güncelleyen kod <strong>kritik bölgedir</strong> ve ortak <strong>mutex</strong> ile korunmalıdır.<br><strong>d)</strong> RAM yetmiyor; işletim sistemi sayfaları diske taşıyıp geri getiriyor (<strong>takas</strong>) ve sık <strong>sayfa hatası</strong> oluşuyor. CPU diski beklediği için boşta (%15) görünür. Daha hızlı CPU çözüm değildir; <strong>RAM eklemek</strong> veya aynı anda açık uygulama sayısını azaltmak gerekir.', checklist: ['a) Bekleyen → Hazır (doğrudan çalışan değil!) yazdım', 'b) Eşzamanlı + tek çekirdek gerekçesi yazdım', 'c) Yarış durumu + kritik bölge + ortak mutex yazdım', 'd) RAM yetersizliği + takas/sayfa hatası + yeni CPU çözmez, RAM ekle/uygulama azalt yazdım'] },
+  { id: 'V2', type: 'case', week: '6 Haftayı Bağlayan Vaka (E-Ticaret / Depo)', q: 'Bir e-ticaret deposunda 3 hazırlama istasyonu ve tek barkod yazıcısı var. Gün içinde çalışanlar ekrandan sipariş sorguluyor, gece 02:00\'de günlük kargo raporu çıkıyor.\n\na) Gün içi sorgu ve gece raporu hangi çalışma biçimleridir? Tek barkod yazıcısının sırayla kullanılması hangi paylaşım biçimi ve OS görevidir?\nb) Depo uygulamasında 4 çalışan aynı anda 3 istasyona girmek isterse hangi eşgüdüm aracı kullanılır? Aynı ürünün stok sayısını düşerken neden bu araç tek başına yetmez?\nc) Sipariş ekranı 35 saniye donmadan çalışıyor ama uzak sunucudan gelen stok raporu gecikiyor ve CPU %9 görünüyor. Kesin sorun nedir diyebilir misiniz? Ne önerirsiniz?', model: '<strong>a)</strong> Gün içi sorgu = <strong>etkileşimli</strong>, gece raporu = <strong>toplu iş</strong>. Tek yazıcının sırayla kullanılması <strong>zamanda paylaşım</strong> ve <strong>kaynak yönetimi</strong> görevidir.<br><strong>b)</strong> 3 istasyon kapasitesini yönetmek için <strong>3 izinli semafor</strong> kullanılır (4. iş bekler). Ancak aynı stok kaydını güncellerken 3 işin birden girmesi yarış durumuna yol açar; stok okuma+kontrol+yazma kritik bölgesi ortak <strong>mutex</strong> ile korunmalıdır.<br><strong>c)</strong> Kesin neden tek başına söylenemez! CPU düşük olduğundan büyük olasılıkla ağ iletimi veya uzak sunucu yanıtı bekleniyordur (süreç bekleyen durumdadır), ancak kesin teşhis için <strong>ek ölçüm</strong> (gidiş-dönüş süresi, sunucu kayıtları) gerekir.', checklist: ['a) Etkileşimli/toplu iş + zamanda paylaşım + kaynak yönetimi yazdım', 'b) 3 izinli semafor (kapasite) vs mutex (stok kritik bölgesi) ayrımını yazdım', 'c) Kesin hüküm vermeyip muhtemel ağ/sunucu beklemesi + ek ölçüm şartını yazdım'] },
+  { id: 'V3', type: 'case', week: 'Sınav Provası Vaka (Hafta 2 + 5 + 6)', q: 'Bir üniversite öğrenci işleri sunucusunda dönem sonunda hem uzun not ortalaması hesaplaması (A=6) hem de öğrencilerin kısa transkript sorguları (B=2, C=2) t=0\'da aynı anda geliyor (sıra: A, B, C).\n\na) Öğrencilerin hızlı yanıt alması için FCFS, SJF ve Round Robin (q=2) arasından hangisini seçersiniz? İlk yanıt (R) değerlerini hesaplayarak gerekçelendirin.\nb) Bu sunucuda öğrenciler not dosyalarını sadece okuyabilmeli, değiştirememelidir. Bir öğrenci programı dosyayı değiştirmeye çalışırsa hangi modda ve hangi mekanizmayla engellenir?\nc) Sunucunun sayfa boyutu 4096 bayt, tablo (0→4, 1→7, 2→3). Bir transkript verisi 10 KiB yer tutuyor. Kaç sayfa ayrılır, iç parçalanma kaç KiB olur ve sanal 4500 adresi hangi fiziksel adrese gider?', model: '<strong>a)</strong> Etkileşimli hızlı ilk yanıt için <strong>Round Robin (q=2)</strong> uygundur. FCFS\'de R: A=0, B=6, C=8 (Ort=4,67). RR (q=2)\'de A(0-2), B(2-4), C(4-6) → R: A=0, B=2, C=4 (Ort=<strong>2</strong>). Üstelik RR süre tahmini gerektirmez ve uzun iş A aç kalmaz.<br><strong>b)</strong> Program <strong>kullanıcı modunda</strong> çalışır ve yazma için <strong>sistem çağrısı</strong> yapar. İşlemci <strong>çekirdek moduna</strong> geçer, çekirdek izinleri denetler ve yetki olmadığı için <strong>erişim reddi</strong> hatası döndürür.<br><strong>c)</strong> 10 KiB / 4 KiB → <strong>3 sayfa (12 KiB)</strong> ayrılır; son sayfada <strong>2 KiB iç parçalanma</strong> oluşur. Sanal 4500 = 1×4096 + 404 → Sayfa 1, Ofset 404. Tablodan Sayfa 1 → Çerçeve 7. Fiziksel = 7×4096 + 404 = 28672 + 404 = <strong>29076</strong>.', checklist: ['a) RR seçip R değerlerini ve süre tahmini gerekmediğini yazdım', 'b) Kullanıcı modu → sistem çağrısı → çekirdek modu izin denetimi → erişim reddi akışını yazdım', 'c) 3 sayfa, 2 KiB iç parçalanma ve 29076 fiziksel adresini doğru hesapladım'] },
+  { id: 'V4', type: 'case', week: '6 Haftalık Bütünleştirici Akış (Bölüm Raporu)', q: 'Çalışma Notundaki "Bir rapor baştan sona" akışında şu 5 olay hangi kavram ve haftalarla ilgilidir?\n1) Sekreter "Dönem raporu" düğmesine basıp dosyayı adıyla açıyor.\n2) Süreç not dosyasını okumak istiyor ve disk okurken ilerleyemiyor.\n3) Disk okumayı bitiriyor.\n4) Gereken bir bellek sayfası diskte kalmış.\n5) İki görevli aynı anda ortak sayaca rapor numarası yazıyor.', model: '<strong>1)</strong> Etkileşimli kullanım ve soyutlama (Hafta 1).<br><strong>2)</strong> Okuma isteği = sistem çağrısı (kullanıcı → çekirdek modu, H2); disk okurken ilerleyememe = Bekleyen durum ve CPU\'nun başka sürece verilmesi / bağlam değiştirme (H3).<br><strong>3)</strong> Donanım kesmesi (H2) ve sürecin Bekleyen → Hazır durumuna geçmesi (H3).<br><strong>4)</strong> Sayfa hatası (page fault); OS sayfayı diskten boş çerçeveye getirip sayfa tablosunu günceller ve erişimi yineler (H6).<br><strong>5)</strong> Yarış durumu riski; sayaç okuma+artırma+yazma kritik bölgedir ve ortak mutex ile korunmalıdır (H4).', checklist: ['Her 5 adımda ilgili kavramı doğru eşleştirdim', 'Bekleyen → Hazır ve sayfa hatasının olağan akışını doğru açıkladım'] }
+];
+
+// ===================== STATE MANAGEMENT (LOCALSTORAGE) =====================
+const STORE_KEY = 'is_arasinav_v1';
+let state = {
+  donePlan: {},
+  qStats: {},     // id -> { streak: 0..2, wrongCount: 0, flagged: bool }
+  streak: 0,
+  dark: false,
+  timerSec: 120 * 60
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      state = { ...state, ...parsed };
+    }
+  } catch (e) {}
+  if (state.dark) document.body.classList.add('dark');
+  updateDarkBtn();
+  updateTimerDisplay();
+}
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  updateTopStats();
+}
+
+function getQStat(id) {
+  if (!state.qStats[id]) state.qStats[id] = { streak: 0, wrongCount: 0, flagged: false };
+  return state.qStats[id];
+}
+function isMastered(id) { return getQStat(id).streak >= 2; }
+function isWeak(id) {
+  const s = getQStat(id);
+  return s.flagged || (s.wrongCount > 0 && s.streak < 2);
+}
+
+// ===================== TIMER & THEME =====================
+let timerInt = null;
+function updateTimerDisplay() {
+  const m = Math.floor(state.timerSec / 60);
+  const s = state.timerSec % 60;
+  document.getElementById('timerDisplay').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+function toggleTimer() {
+  const btn = document.getElementById('timerToggleBtn');
+  if (timerInt) {
+    clearInterval(timerInt);
+    timerInt = null;
+    btn.textContent = 'Devam Et';
+  } else {
+    btn.textContent = 'Duraklat';
+    timerInt = setInterval(() => {
+      if (state.timerSec > 0) {
+        state.timerSec--;
+        updateTimerDisplay();
+        if (state.timerSec % 15 === 0) saveState();
+      } else {
+        clearInterval(timerInt);
+        timerInt = null;
+        btn.textContent = 'Bitti!';
+        alert('🎉 2 Saatlik çalışma süresi tamamlandı! Sınavda başarılar!');
+      }
+    }, 1000);
+  }
+}
+function resetTimer() {
+  if (timerInt) { clearInterval(timerInt); timerInt = null; }
+  state.timerSec = 120 * 60;
+  document.getElementById('timerToggleBtn').textContent = 'Başlat';
+  updateTimerDisplay();
+  saveState();
+}
+function toggleDark() {
+  state.dark = !state.dark;
+  document.body.classList.toggle('dark', state.dark);
+  updateDarkBtn();
+  saveState();
+}
+function updateDarkBtn() {
+  document.getElementById('darkBtn').textContent = state.dark ? '☀️ Gündüz Modu' : '🌙 Gece Modu';
+}
+
+// ===================== NAVIGATION =====================
+function showTab(name, btnEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'plan') renderPlanDashboard();
+  if (name === 'quiz' && !quizQueue.length) startQuizMode('smart', document.querySelector('#quizModeTabs .subtab'));
+  if (name === 'exam' && !examQuestions.length) startMockExam();
+}
+
+function updateTopStats() {
+  const mastered = QUESTIONS.filter(q => isMastered(q.id)).length;
+  const weak = QUESTIONS.filter(q => isWeak(q.id)).length;
+  document.getElementById('masteryPill').textContent = `Öğrenilen: ${mastered}/${QUESTIONS.length}`;
+  document.getElementById('weakPill').textContent = `Tekrar Kuyruğu: ${weak}`;
+  const qb1 = document.getElementById('qMasteredBadge');
+  const qb2 = document.getElementById('qWeakBadge');
+  const qb3 = document.getElementById('qStreakBadge');
+  if (qb1) qb1.textContent = `✅ Öğrenilen: ${mastered}/${QUESTIONS.length}`;
+  if (qb2) qb2.textContent = `🔴 Tekrar Kuyruğu: ${weak}`;
+  if (qb3) qb3.textContent = `🔥 Seri: ${state.streak}`;
+}
+
+// ===================== 1. PLAN DASHBOARD =====================
+function renderPlanDashboard() {
+  const mastered = QUESTIONS.filter(q => isMastered(q.id)).length;
+  const doneBlocks = PLAN_BLOCKS.filter(b => state.donePlan[b.id]).length;
+  const pct = Math.round(((mastered / QUESTIONS.length) * 0.75 + (doneBlocks / PLAN_BLOCKS.length) * 0.25) * 100);
+  document.getElementById('overallPctText').textContent = pct + '%';
+  document.getElementById('overallBar').style.width = pct + '%';
+
+  // Per-week mastery
+  const wNames = ['', 'H1: Giriş', 'H2: Donanım', 'H3: Süreç/Thr', 'H4: Eşgüdüm', 'H5: Zamanlama', 'H6: Bellek'];
+  let wHtml = '';
+  for (let w = 1; w <= 6; w++) {
+    const qs = QUESTIONS.filter(q => q.week === w);
+    const m = qs.filter(q => isMastered(q.id)).length;
+    const wp = Math.round((m / qs.length) * 100);
+    wHtml += `
+      <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px;">
+        <div style="font-size:12.5px; font-weight:700; display:flex; justify-content:space-between;">
+          <span>${wNames[w]}</span><span style="color:var(--primary)">${m}/${qs.length}</span>
+        </div>
+        <div class="progress" style="height:7px; margin-top:6px;"><div class="progress-fill" style="width:${wp}%"></div></div>
+      </div>`;
+  }
+  document.getElementById('weekMasteryGrid').innerHTML = wHtml;
+
+  // Plan steps
+  const pl = document.getElementById('planList');
+  pl.innerHTML = '';
+  PLAN_BLOCKS.forEach((b, idx) => {
+    const checked = !!state.donePlan[b.id];
+    const div = document.createElement('div');
+    div.className = 'plan-step' + (checked ? ' done' : '');
+    div.innerHTML = `
+      <input type="checkbox" ${checked ? 'checked' : ''} style="width:20px; height:20px; margin-top:4px; cursor:pointer;" onchange="togglePlanBlock('${b.id}')">
+      <div class="plan-time">${b.time}</div>
+      <div style="flex:1;">
+        <div style="font-weight:800; font-size:15px;">${b.title}</div>
+        <div class="muted" style="font-size:13.5px; margin:3px 0 8px;">${b.desc}</div>
+        <button class="btn sm primary" id="planAct-${idx}">${b.actionText} →</button>
+      </div>`;
+    pl.appendChild(div);
+    document.getElementById('planAct-' + idx).onclick = b.action;
+  });
+}
+function togglePlanBlock(id) {
+  state.donePlan[id] = !state.donePlan[id];
+  saveState();
+  renderPlanDashboard();
+}
+
+// ===================== 2. NOTES & INTERACTIVE SIMULATORS =====================
+const NOTE_HTML = {
+  1: `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h2>📘 1. Hafta: İşletim Sistemine Giriş</h2>
+        <button class="btn sm primary" onclick="jumpWeekQuiz(1)">🔁 1. Hafta Testini Çöz</button>
+      </div>
+      <p><strong>İşletim sistemi</strong>, donanım kaynaklarını yöneten ve uygulamaların çalışması için ortak hizmetler sunan sistem yazılımıdır. <em>Windows, macOS, Android = OS</em>; <em>Word = uygulama</em>.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3>İki Temel Görev (Aynı İşlemde Birlikte Olabilir!)</h3>
+          <table>
+            <tr><th>Görev</th><th>Anlamı</th><th>Örnek</th></tr>
+            <tr><td><strong>Soyutlama</strong></td><td>Karmaşık donanım ayrıntıları yerine kullanışlı nesne/işlem sunmak</td><td>Dosyayı sadece adıyla ("rapor.pdf") açıp kaydetmek</td></tr>
+            <tr><td><strong>Kaynak Yönetimi</strong></td><td>Kimin, neyi, ne zaman, hangi sırayla kullanacağını düzenlemek</td><td>İki programın tek yazıcıya gönderdiği belgelerin sırayla basılması</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3>Paylaşımın İki Biçimi</h3>
+          <table>
+            <tr><th>Biçim</th><th>Anlamı</th><th>Örnek</th></tr>
+            <tr><td><strong>Zamanda Paylaşım</strong></td><td>İşler kaynağı sırayla kullanır</td><td>İşlemci (CPU), tek fiş yazıcısı</td></tr>
+            <tr><td><strong>Alanda Paylaşım</strong></td><td>Kaynağın bölümleri işlere ayrılır</td><td>RAM çalışma alanları, disk alanı</td></tr>
+          </table>
+          <p class="muted" style="font-size:13px;">💡 Aynı sistemde ikisi birlikte bulunur: Programlar RAM'i <strong>alanda</strong>, CPU'yu <strong>zamanda</strong> paylaşır.</p>
+        </div>
+      </div>
+
+      <h3>3 Çalışma Biçimi & Gelişim Mantığı (Yıl ezberi yok, ihtiyacı bil!)</h3>
+      <table>
+        <tr><th>Biçim</th><th>Belirleyici Özellik</th><th>İşletme Örneği</th></tr>
+        <tr><td><strong>Toplu İş (Batch)</strong></td><td>Kullanıcı beklemez; sürekli etkileşim olmadan, çoğu zaman belirli saatte arka arkaya yürütülür.</td><td>Gece yarısı hazırlanan satış/faiz raporu</td></tr>
+        <tr><td><strong>Etkileşimli (Interactive)</strong></td><td>Kullanıcı ekran başındadır; her isteğine kısa sürede yanıt bekler (zaman paylaşımı ile gelişti).</td><td>Kasada ürün arama, bankada müşteri sorgusu</td></tr>
+        <tr><td><strong>Gerçek Zamanlı (Real-time)</strong></td><td>Sonucun tanımlanmış zaman sınırında üretilmesi zorunludur. <strong>Sert:</strong> kaçırılamaz. <strong>Yumuşak:</strong> gecikme kaliteyi düşürür.</td><td>Üretim hattında zaman kısıtlı denetim</td></tr>
+      </table>
+      <p style="font-size:13.5px;"><strong>Çoklu programlama:</strong> Bir iş G/Ç beklerken CPU'nun başka işe geçerek boş kalmaması. <strong>Kullanım ortamları</strong> örtüşebilir (gömülü cihaz gerçek zamanlı olabilir). <strong>Seçim kuralı:</strong> Ürün adından önce uyumluluk kanıtı (satış uygulaması ve yazıcı desteği) sorulur!</p>
+
+      <div class="trap-box">
+        <strong>⚠️ 1. Hafta Sık Karıştırılanlar (Sınav Tuzakları):</strong>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li>"Hızlı sistem = gerçek zamanlı sistem" <strong>YANLIŞ!</strong> Belirleyici ortalama hız değil, <strong>zaman sınırına uyma</strong> zorunluluğudur.</li>
+          <li>Masaüstü işletim sisteminin tamamı değildir; yalnızca <strong>kullanıcı arayüzüdür</strong>.</li>
+          <li>Yazdırma kuyruğunda beklemek tek başına hata değildir.</li>
+          <li>Aynı işletmede etkileşimli ve toplu iş birlikte çalışabilir!</li>
+        </ul>
+      </div>
+    </div>`,
+
+  2: `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h2>🖥️ 2. Hafta: Donanım ve İşletim Sistemi Yapısı</h2>
+        <button class="btn sm primary" onclick="jumpWeekQuiz(2)">🔁 2. Hafta Testini Çöz</button>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Donanım & Çalışma Masası Benzetmesi</h3>
+          <table>
+            <tr><th>Bileşen</th><th>Görevi</th><th>Benzetme / Not</th></tr>
+            <tr><td><strong>CPU</strong></td><td>Getir → Çöz → Yürüt</td><td>Hesap yapan kişi. <strong>Yazmaçlar:</strong> CPU içi çok hızlı küçük alan.</td></tr>
+            <tr><td><strong>RAM</strong></td><td>Çalışan program verisi (geçici)</td><td>Çalışma masası. Güç kesilince silinir!</td></tr>
+            <tr><td><strong>SSD / HDD</strong></td><td>Kalıcı dosya saklama</td><td>Dosya dolabı. Büyük SSD = fazla RAM değildir!</td></tr>
+            <tr><td><strong>Önbellek</strong></td><td>Tekrar kullanılacak veriyi hızlı tutma</td><td>Veri önbellekteyse diske gidilmeyebilir.</td></tr>
+          </table>
+          <p><strong>Sürücü (Driver)</strong> = aygıtla iletişime katılan <strong>YAZILIM</strong>. <strong>Denetleyici (Controller)</strong> = aygıtı kontrol eden <strong>DONANIM</strong>.</p>
+        </div>
+
+        <div>
+          <h3>Sistem Çağrısı vs Donanım Kesmesi</h3>
+          <table>
+            <tr><th>Ölçüt</th><th>Sistem Çağrısı</th><th>Donanım Kesmesi</th></tr>
+            <tr><td>Kim başlatır?</td><td><strong>Uygulama</strong> (API ile)</td><td><strong>Aygıt veya zamanlayıcı</strong></td></tr>
+            <tr><td>Ne anlatır?</td><td>"Benim için şu hizmeti yap."</td><td>"Şu olay gerçekleşti." (Kapı zili!)</td></tr>
+            <tr><td>Örnek</td><td>Dosyadan veri okuma isteği</td><td>"Disk okuma tamamlandı" bildirimi</td></tr>
+          </table>
+          <p class="muted" style="font-size:13px;">💡 İkisi de çekirdek kodunu çalıştırabilir! Aygıtı sürekli kontrol etmeye <strong>Yoklama (Polling)</strong> denir.</p>
+        </div>
+      </div>
+
+      <h3>Kullanıcı Modu vs Çekirdek Modu & 5 Adımda Rapor Okuma Akışı</h3>
+      <p>Uygulama <strong>kullanıcı modunda</strong> çalışır → donanıma doğrudan erişemez → korunan hizmet için <strong>sistem çağrısı</strong> yapar → işlemci <strong>çekirdek moduna</strong> geçer (<strong>Koruma</strong> + <strong>Düzenli kaynak yönetimi</strong> sağlar).</p>
+      <div class="tip-box">
+        <strong>📂 Bir Raporu Açıp Okuma (5 Adım):</strong>
+        1) <strong>Açma isteği</strong> (API → sistem çağrısı → çekirdek modu) →
+        2) <strong>Denetim</strong> (yol ve izin kontrolü; izin yoksa erişim reddi, hızlı CPU bunu çözmez!) →
+        3) <strong>Tanıtıcı</strong> (açma ≠ tüm içeriği okuma!) →
+        4) <strong>Okuma</strong> (önbellekteyse oradan, değilse sürücü → denetleyici → disk bitince <strong>donanım kesmesi</strong>!) →
+        5) <strong>Dönüş</strong> (veri teslim edilir, kullanıcı modunda devam, iş bitince kapat).
+      </div>
+
+      <h3>Monolitik Yapı vs Mikroçekirdek</h3>
+      <table>
+        <tr><th>Özellik</th><th>Monolitik Yapı</th><th>Mikroçekirdek</th></tr>
+        <tr><td>Hizmetlerin yeri</td><td>Sürücüler, dosya sistemi <strong>çekirdek içinde</strong></td><td>Sürücüler, dosya sistemi <strong>ayrı kullanıcı süreçlerinde</strong></td></tr>
+        <tr><td>İletişim</td><td>Çekirdek içi çağrılar (kısa/hızlı)</td><td>Süreçler arası mesajlaşma (ek adımlar)</td></tr>
+        <tr><td>Hata etkisi</td><td>Bir sürücü hatası bütün çekirdeği etkileyebilir</td><td>Hata o süreçle sınırlı kalır, sürücü yeniden başlatılabilir</td></tr>
+      </table>
+
+      <div class="trap-box">
+        <strong>⚠️ 2. Hafta Sık Karıştırılanlar:</strong>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li><strong>Yönetici hesabı ≠ Çekirdek modu!</strong> Hesap yetkisi erişim iznidir, mod ise işlemci ayrıcalığıdır. Yönetici uygulaması yine kullanıcı modunda çalışır!</li>
+          <li><strong>Kesme bir hata/kapanma değildir</strong> — normal olay bildirimidir!</li>
+          <li>Her işlev çağrısı sistem çağrısı değildir (iki sayıyı toplamak kullanıcı modunda biter).</li>
+          <li>Dosya açmak içeriğin tamamını RAM'e okumak değildir; her okuma da diske gitmez (önbellek!).</li>
+        </ul>
+      </div>
+    </div>`,
+
+  3: `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h2>⚙️ 3. Hafta: Süreçler ve İş Parçacıkları</h2>
+        <button class="btn sm primary" onclick="jumpWeekQuiz(3)">🔁 3. Hafta Testini Çöz</button>
+      </div>
+      <p><strong>Program</strong> = diskteki pasif komut tanımı. <strong>Süreç (Process)</strong> = yürütülen örnek (durumu + kaynakları + <strong>PID</strong>). Aynı program 2 kez başlatılırsa 1 program, 2 süreç vardır. <strong>Pencere sayısı süreç sayısını kanıtlamaz!</strong></p>
+
+      <!-- INTERACTIVE 3-STATE SIMULATOR -->
+      <div class="card" style="background:var(--surface-2); margin:14px 0;">
+        <h3>🎮 Canlı Süreç Durum Simülatörü (Tıkla & Geçişleri Gör!)</h3>
+        <div class="state-nodes">
+          <div class="state-node active-state" id="st-ready"><h4>🟡 HAZIR (Ready)</h4><small>Çalışabilir, sadece CPU sırası bekler</small></div>
+          <div class="state-node" id="st-running"><h4>🟢 ÇALIŞAN (Running)</h4><small>Şu an CPU'da komut yürütüyor</small></div>
+          <div class="state-node" id="st-blocked"><h4>🔴 BEKLEYEN (Blocked)</h4><small>G/Ç veya olay bekler (CPU boş olsa bile çalışamaz!)</small></div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:12px 0;">
+          <button class="btn sm primary" onclick="simState('dispatch')">1. Zamanlayıcı seçti (Hazır → Çalışan)</button>
+          <button class="btn sm warn" onclick="simState('io')">2. Disk/Ağ istedi (Çalışan → Bekleyen)</button>
+          <button class="btn sm success" onclick="simState('doneio')">3. Kesme geldi: G/Ç bitti (Bekleyen → Hazır)</button>
+          <button class="btn sm" onclick="simState('quantum')">4. Zaman dilimi doldu (Çalışan → Hazır)</button>
+          <button class="btn sm danger" onclick="simState('illegal')">🚫 Dene: Bekleyen → Çalışan</button>
+        </div>
+        <div id="simStateLog" class="tip-box" style="margin:8px 0 0;">Şu anki durum: <strong>HAZIR</strong>. Bir olay butonuna tıkla ve nedenini gör!</div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Bağlam Değiştirme & PCB</h3>
+          <p style="font-size:13.5px;">CPU bir süreçten diğerine geçerken <strong>program sayacı, yazmaçlar ve yığın konumunu</strong> saklar, diğerininkini yükler → süreç kaldığı yerden devam eder (geçiş zaman harcar!). <strong>PCB (Süreç Kontrol Bloğu):</strong> Süreç tablosundaki kayıt (PID, durum, zamanlama, bellek/dosya ilişkileri).</p>
+          <h3>Eşzamanlılık vs Paralellik</h3>
+          <p style="font-size:13.5px;"><strong>Eşzamanlılık:</strong> Tek çekirdekte CPU sırayla paylaşılır; aynı aralıkta ilerler ama bir anda tek iş çalışır.<br><strong>Paralellik:</strong> Farklı çekirdeklerde gerçekten aynı anda çalışma.</p>
+        </div>
+        <div>
+          <h3>İş Parçacığı (Thread): Ortak vs Ayrı</h3>
+          <table>
+            <tr><th>Aynı Süreçte ORTAK</th><th>Her Thread'de AYRI</th></tr>
+            <tr>
+              <td>• Adres alanı<br>• Program kodu<br>• Ortak veriler<br>• Sürece ait açık dosyalar</td>
+              <td>• Program sayacı (PC)<br>• Yazmaçlar<br>• Yığın (Stack)*<br>• Yürütme durumu</td>
+            </tr>
+          </table>
+          <p class="muted" style="font-size:12.5px;">*Ayrı yığın, ayrı koruma alanı demek değildir! Aynı adres alanındadırlar.</p>
+        </div>
+      </div>
+
+      <div class="trap-box">
+        <strong>⚠️ 3. Hafta Sık Karıştırılanlar:</strong>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li><strong>Bekleyen → Çalışan DOĞRUDAN GEÇİŞ YOKTUR!</strong> Olay bitince önce <strong>Hazır</strong> olur!</li>
+          <li>Daha fazla iş parçacığı her zaman hızlandırmaz (bölünebilirlik, çekirdek sayısı, kilitler, yönetim maliyeti).</li>
+          <li>40 sn rapor + %8 CPU = Muhtemelen ağ/disk/sunucu bekleniyor ama <strong>tek başına kesin kanıt değildir</strong> — ek ölçüm iste!</li>
+        </ul>
+      </div>
+    </div>`,
+
+  4: `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h2>🔒 4. Hafta: Süreçler Arası İletişim ve Eşgüdüm</h2>
+        <button class="btn sm primary" onclick="jumpWeekQuiz(4)">🔁 4. Hafta Testini Çöz</button>
+      </div>
+      <p><strong>İletişim:</strong> Veri/haber alışverişi (siparişi iletmek). <strong>Eşgüdüm:</strong> Güvenli erişim ve doğru sıra (sipariş oluşmadan hazırlamamak).</p>
+
+      <!-- INTERACTIVE RACE CONDITION vs MUTEX SIMULATOR -->
+      <div class="card" style="background:var(--surface-2); margin:14px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h3>🎮 Canlı Stok = 1 Simülatörü: Yarış Durumu vs Mutex</h3>
+          <div style="display:flex; gap:8px;">
+            <button class="btn sm danger" onclick="setRaceMode(false)">⚠️ Koruyucusuz (Yarış)</button>
+            <button class="btn sm success" onclick="setRaceMode(true)">🔒 Ortak Mutex ile (Güvenli)</button>
+            <button class="btn sm primary" onclick="stepRace()">▶ Sonraki Adım</button>
+          </div>
+        </div>
+        <div id="raceDisplay" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Kritik Bölge, Mutex & 4 Koşul</h3>
+          <p style="font-size:13.5px;"><strong>Kritik bölge:</strong> Ortak veriye erişen <strong>okuma + kontrol + güncelleme</strong> adımlarının tamamı! (Ürün seçme, uzun fiş hazırlama dışındadır).<br><strong>Mutex:</strong> Atomik (bölünemez) ortak kilit; edinen bırakır.</p>
+          <p style="font-size:13.5px;"><strong>Doğru Çözümün 4 Koşulu:</strong> (1) Karşılıklı dışlama (aynı anda ≤1 iş), (2) Hız/CPU sayısına güvenmeme, (3) Bölge dışındaki iş engellemez, (4) Sonsuz bekleme olmaz.</p>
+          <p style="font-size:13px; color:var(--danger);"><strong>İşe yaramayan kısa yollar:</strong> Gecikme koymak ❌ • Sadece yazmayı kilitlemek ❌ • Her kasaya ayrı kilit ❌</p>
+        </div>
+        <div>
+          <h3>Mutex vs Semafor & Üretici–Tüketici</h3>
+          <table>
+            <tr><th>Mutex</th><th>Semafor (down / up)</th></tr>
+            <tr><td>Kritik bölgeyi / ortak veriyi korur (≤1 iş)</td><td>İzin / kapasite / olay sayısı yönetir (örn. 3 istasyon)</td></tr>
+            <tr><td>Kilidi edinen bırakır</td><td>Başka iş olay/izin (up) bildirebilir</td></tr>
+          </table>
+          <div class="warn-box" style="margin:8px 0;">
+            <strong>🏭 Üretici–Tüketici Altın Kuralı:</strong> 2 semafor (boş yer + hazır kayıt) + 1 mutex. <strong>Koşul izni (semafor) mutexten ÖNCE alınır!</strong> Kilidi tutarak beklemek kilitlenmeye yol açar!
+          </div>
+        </div>
+      </div>
+      <p style="font-size:13.5px;"><strong>Monitor:</strong> Ortak veri + yordamlar tek yapıda, aynı anda tek iş çalışır. <strong>Mesaj geçişi:</strong> gönder/al, farklı makineler arasında çalışır ama işleyen taraf yine sırayla ve korumalı işlemelidir.</p>
+
+      <div class="trap-box">
+        <strong>⚠️ 4. Hafta Sık Karıştırılanlar:</strong>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li><strong>Tek çekirdekte de yarış durumu olur!</strong> (A okuduktan sonra bağlam değişip B okuyabilir).</li>
+          <li>Birkaç başarılı deneme güvenlik kanıtı değildir!</li>
+          <li>Mutex bırakılınca bekleyen iş hemen çalışmaz → <strong>Hazır</strong> olur, CPU zamanlayıcıya bağlı!</li>
+          <li>Ayrı makinelerdeki kasalar tek bilgisayardaki mutex ile korunmaz → ortak sunucuda eşgüdüm gerekir!</li>
+        </ul>
+      </div>
+    </div>`,
+
+  5: `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h2>⏱️ 5. Hafta: İşlemci Zamanlama</h2>
+        <div style="display:flex; gap:8px;">
+          <button class="btn sm success" onclick="showTab('calc', document.querySelectorAll('.nav-btn')[3]); showCalcTab('sched', document.querySelectorAll('#sec-calc .subtab')[0]);">🧮 Hesaplama Atölyesine Git</button>
+          <button class="btn sm primary" onclick="jumpWeekQuiz(5)">🔁 5. Hafta Testini Çöz</button>
+        </div>
+      </div>
+
+      <p>Zamanlayıcı yalnızca <strong>hazır kuyruktaki</strong> işlerden seçer (G/Ç bekleyenler katılmaz!). <strong>Kesmesiz</strong> (FCFS, dersteki SJF): iş bitene/bekleyene kadar CPU alınmaz. <strong>Kesmeli</strong> (Round Robin): dilim dolunca CPU geri alınabilir.</p>
+
+      <div class="tip-box">
+        <strong>📐 3 Temel Ölçü (Varış V, CPU İhtiyacı B, Tamamlanma C):</strong><br>
+        • <strong>Toplam Kalış:</strong> <code>T = C − V</code> &nbsp;|&nbsp;
+        • <strong>İlk Yanıt:</strong> <code>R = İlk CPU − V</code> &nbsp;|&nbsp;
+        • <strong>Hazırda Bekleme:</strong> <code>W = T − B</code> (G/Ç yoksa)<br>
+        • <strong>Bağlam Değiştirme Yönetim Payı:</strong> <code>s / (q + s)</code> (s=0,2 için q=1 → %16,7 • q=2 → %9,1 • q=8 → %2,4)
+      </div>
+
+      <h3>Dersin Ortak Örneği: A = 8, B = 4, C = 2 (Hepsi V = 0, Başlangıç Sırası A, B, C)</h3>
+      <table>
+        <tr><th>Yöntem</th><th>Kural & Çizelge</th><th>Ort. R</th><th>Ort. W</th><th>Ort. T</th><th>Güçlü / Zayıf Yanı</th></tr>
+        <tr><td><strong>FCFS</strong> (Kesmesiz)</td><td>A(0-8), B(8-12), C(12-14)</td><td>6,67</td><td>6,67</td><td>11,33</td><td>Basit / Uzun A arkasında kısa C 12 birim bekler</td></tr>
+        <tr><td><strong>SJF</strong> (Kesmesiz)</td><td>C(0-2), B(2-6), A(6-14)</td><td>2,67</td><td><strong>2,67</strong></td><td><strong>7,33</strong></td><td>Ort. W minimum / Süre bilinmez, uzun iş <strong>aç kalabilir</strong>, A: 0→6 çıktı!</td></tr>
+        <tr><td><strong>Round Robin</strong> (q=2, Kesmeli)</td><td>A(0-2), B(2-4), C(4-6), A(6-8), B(8-10), A(10-14)</td><td><strong>2,00</strong></td><td>5,33</td><td>10,00</td><td>En iyi ilk yanıt, süre bilgisi gerekmez / Küçük q → geçiş maliyeti; büyük q → FCFS!</td></tr>
+      </table>
+      <p class="muted" style="font-size:13px;">💡 Üç yöntemde de son iş <strong>14'te</strong> biter; değişen toplam iş değil hizmet sırasıdır! İş bitince kullanılmayan zaman dilimi beklenmez!</p>
+
+      <div class="trap-box">
+        <strong>⚠️ 5. Hafta Sık Karıştırılanlar:</strong>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li>"Zaman dilimi (q) küçüldükçe sistem hep iyileşir" <strong>YANLIŞ!</strong> Bağlam değiştirme maliyeti artar!</li>
+          <li>"Ortalama azalırsa her iş daha az bekler" <strong>YANLIŞ!</strong> SJF'de A'nın beklemesi 0'dan 6'ya çıktı!</li>
+          <li>"Erken CPU alan iş erken biter" <strong>YANLIŞ!</strong> RR'de A 0'da başlar, 14'te (en son) biter!</li>
+          <li>"Adalet = herkesin aynı anda bitmesi" <strong>YANLIŞ!</strong> Makul fırsat + aç kalmamaktır!</li>
+        </ul>
+      </div>
+    </div>`,
+
+  6: `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h2>🧠 6. Hafta: Bellek Yönetimi</h2>
+        <div style="display:flex; gap:8px;">
+          <button class="btn sm success" onclick="showTab('calc', document.querySelectorAll('.nav-btn')[3]); showCalcTab('mem', document.querySelectorAll('#sec-calc .subtab')[1]);">🧮 Adres Çevirme Makinesi</button>
+          <button class="btn sm primary" onclick="jumpWeekQuiz(6)">🔁 6. Hafta Testini Çöz</button>
+        </div>
+      </div>
+
+      <p><strong>Mutfak benzetmesi:</strong> Aşçı = CPU, Tezgâh = RAM, Kiler = Disk. CPU yalnızca RAM'deki veriyle çalışır! <strong>Dosya ≠ RAM:</strong> Diskte 4 MB JPEG → RAM'de 36 MB (12M piksel × 3B), filtre + geri alma ile <strong>108 MB</strong>! <strong>Bellek yöneticisinin 3 görevi (Otel resepsiyonu):</strong> Yer ayır, kaydı tut, erişimi koru.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3>Dış vs İç Parçalanma</h3>
+          <table>
+            <tr><th>Dış Parçalanma (Otopark)</th><th>İç Parçalanma (Minibüs)</th></tr>
+            <tr><td>Toplam boş alan yeterli ama dağınık (6 yer boş, yan yana 4 yer yok).</td><td>Eşit parça ayrılınca son parçada boşluk kalır (10 KiB → 3×4=12 KiB → 2 KiB boş).</td></tr>
+            <tr><td><strong>Sayfalama ortadan kaldırır!</strong></td><td><strong>Son sayfada küçük kayıp kalır.</strong></td></tr>
+          </table>
+        </div>
+        <div>
+          <h3>Sanal → Fiziksel Adres Çevirisi</h3>
+          <div class="ok-box" style="margin:0;">
+            1) <code>Sayfa No = ⌊Sanal / Boyut⌋</code><br>
+            2) <code>Ofset = Sanal mod Boyut</code> (<strong>DEĞİŞMEZ!</strong>)<br>
+            3) Tablodan <code>Sayfa No → Çerçeve No</code><br>
+            4) <code>Fiziksel = Çerçeve × Boyut + Ofset</code><br>
+            <small>Ders tablosu (0→5, 1→2, 2→7), boyut=4096: Sanal 5000 = 1×4096+904 → Çerçeve 2 → 8192+904 = <strong>9096</strong>! Tuzak: 4096 = Sayfa 1, Ofset 0!</small>
+          </div>
+        </div>
+      </div>
+
+      <h3>Takas (Swapping) & Sayfa Hatası (Page Fault)</h3>
+      <p style="font-size:13.5px;">• <strong>Takas:</strong> RAM yetmeyince OS bazı verileri geçici diske taşır. <strong>CPU %15 + RAM %96 + Disk %100</strong> → Darboğaz RAM! Daha hızlı CPU çözmez; RAM artır veya açık uygulamaları azalt! Takas dosya kaydetmek/yedeklemek değildir.<br>
+      • <strong>Sayfa Hatası (4 adım):</strong> (1) MMU tabloda çerçeve bulamaz, OS'ye bildirir → (2) OS boş çerçeve bulur, diskten okur → (3) Sayfa tablosunu günceller → (4) Erişim yeniden denenir. <strong>Olağandır, program bozuk demek değildir!</strong> (Sayfa değiştirme algoritmaları ara sınavdan sonraki konudur!)</p>
+
+      <div class="trap-box">
+        <strong>⚠️ 6. Hafta Sık Karıştırılanlar:</strong>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li><strong>Sayfa ≠ Çerçeve!</strong> Sayfa sanal alanda, çerçeve RAM'dedir. <strong>Çerçeve numarası ≠ Fiziksel adres!</strong></li>
+          <li><strong>Sanal 4096</strong> (4 KiB sayfada) sayfa 0'da değil, <strong>sayfa 1'in ilk baytıdır (ofset 0)</strong>!</li>
+          <li>İki uygulama aynı sanal adresi (5000) kullanabilir; kendi tabloları farklı çerçevelere gider → birbirini bozmaz!</li>
+          <li><strong>Sayfa hatası</strong> program hatası değildir!</li>
+        </ul>
+      </div>
+    </div>`,
+
+  7: `
+    <div class="card">
+      <h2>🔗 6 Haftayı Tek Olayda Birleştir: "Dönem Raporu" Akışı</h2>
+      <p class="muted">Sınavın 3. bölümündeki büyük senaryo soruları tam olarak bu tabloyu ölçer!</p>
+      <table>
+        <thead><tr><th>Olay</th><th>İlgili Kavram</th><th>Hafta</th></tr></thead>
+        <tbody>
+          <tr><td>Sekreter ekrandan "Dönem raporu" düğmesine basıp dosyayı adıyla açıyor.</td><td>Etkileşimli kullanım; soyutlama</td><td><span class="badge b-blue">Hafta 1</span></td></tr>
+          <tr><td>Rapor programı başlatılıyor.</td><td>Program → Süreç (PID, PCB); Hazır durum</td><td><span class="badge b-warn">Hafta 3</span></td></tr>
+          <tr><td>Zamanlayıcı rapor sürecini seçiyor.</td><td>Hazır → Çalışan; zamanlama yöntemi</td><td><span class="badge b-warn">H3</span> <span class="badge b-purple">H5</span></td></tr>
+          <tr><td>Süreç not dosyasını okumak istiyor.</td><td>Sistem çağrısı; kullanıcı → çekirdek modu</td><td><span class="badge b-teal">Hafta 2</span></td></tr>
+          <tr><td>Disk okurken süreç ilerleyemiyor.</td><td>Çalışan → Bekleyen; bağlam değiştirme</td><td><span class="badge b-warn">Hafta 3</span></td></tr>
+          <tr><td>Disk okumayı bitiriyor.</td><td>Donanım kesmesi; Bekleyen → Hazır (hemen çalışan değil!)</td><td><span class="badge b-teal">H2</span> <span class="badge b-warn">H3</span></td></tr>
+          <tr><td>Rapor verisi RAM'e yerleşiyor.</td><td>Sayfalar boş çerçevelere konur; sayfa tablosu</td><td><span class="badge b-green">Hafta 6</span></td></tr>
+          <tr><td>Gereken bir sayfa diskte kalmış.</td><td>Sayfa hatası (olağan!); diskten getir + tabloyu güncelle + dene</td><td><span class="badge b-green">Hafta 6</span></td></tr>
+          <tr><td>İki görevli aynı anda ortak sayaca rapor numarası yazıyor.</td><td>Yarış durumu; kritik bölge (oku+kontrol+yaz) ve ortak mutex</td><td><span class="badge b-red">Hafta 4</span></td></tr>
+          <tr><td>Uzun rapor çalışırken öğrenciler de sistemi kullanıyor.</td><td>FCFS, SJF, Round Robin etkisi; zaman dilimi (q) ve s/(q+s)</td><td><span class="badge b-purple">Hafta 5</span></td></tr>
+        </tbody>
+      </table>
+    </div>`
+};
+
+function showNoteWeek(w, btn) {
+  document.querySelectorAll('#noteTabs .subtab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('noteContent').innerHTML = NOTE_HTML[w];
+  if (w === 3) { curProcState = 'ready'; }
+  if (w === 4) { raceUseMutex = false; raceStep = 0; renderRace(); }
+}
+
+function jumpWeekQuiz(w) {
+  showTab('quiz', document.querySelectorAll('.nav-btn')[2]);
+  const tabs = document.querySelectorAll('#quizModeTabs .subtab');
+  startQuizMode('w' + w, tabs[2 + w]);
+}
+
+// Week 3 State Simulator
+let curProcState = 'ready';
+function simState(ev) {
+  const log = document.getElementById('simStateLog');
+  const setNode = (s) => {
+    curProcState = s;
+    ['ready','running','blocked'].forEach(k => {
+      document.getElementById('st-' + k).classList.toggle('active-state', k === s);
+    });
+  };
+  if (ev === 'dispatch') {
+    if (curProcState === 'ready') { setNode('running'); log.className = 'ok-box'; log.innerHTML = '✅ <strong>Hazır → Çalışan:</strong> Zamanlayıcı bu süreci seçti, bağlam yüklendi ve CPU verildi!'; }
+    else { log.className = 'warn-box'; log.innerHTML = '⚠️ Zamanlayıcı yalnızca <strong>HAZIR</strong> durumdaki süreçleri seçebilir! Önce süreci Hazır yap.'; }
+  } else if (ev === 'io') {
+    if (curProcState === 'running') { setNode('blocked'); log.className = 'tip-box'; log.innerHTML = '🔴 <strong>Çalışan → Bekleyen:</strong> Süreç disk/ağ okuması istedi. Veri gelmeden ilerleyemez; CPU bağlam değiştirerek başka sürece verilir!'; }
+    else { log.className = 'warn-box'; log.innerHTML = '⚠️ G/Ç isteğini yalnızca şu an <strong>ÇALIŞAN</strong> süreç yapabilir!'; }
+  } else if (ev === 'doneio') {
+    if (curProcState === 'blocked') { setNode('ready'); log.className = 'ok-box'; log.innerHTML = '✅ <strong>Bekleyen → Hazır:</strong> Donanım kesmesi geldi! Dikkat: Süreç hemen Çalışan OLMADI, önce <strong>HAZIR</strong> oldu!'; }
+    else { log.className = 'warn-box'; log.innerHTML = '⚠️ Bu geçiş <strong>BEKLEYEN</strong> durumdaki bir süreç için geçerlidir.'; }
+  } else if (ev === 'quantum') {
+    if (curProcState === 'running') { setNode('ready'); log.className = 'tip-box'; log.innerHTML = '🟡 <strong>Çalışan → Hazır:</strong> Zaman dilimi (quantum) doldu! Süreç çalışmaya hâlâ uygun olduğu için Bekleyen değil <strong>HAZIR</strong> olur.'; }
+    else { log.className = 'warn-box'; log.innerHTML = '⚠️ Zaman dilimi yalnızca <strong>ÇALIŞAN</strong> süreç için dolar!'; }
+  } else if (ev === 'illegal') {
+    log.className = 'trap-box';
+    log.innerHTML = '🚫 <strong>YASAK GEÇİŞ (Sınav Tuzağı!):</strong> Bekleyen bir süreç olay bittiğinde ASLA doğrudan Çalışan olamaz! Önce <strong>Hazır</strong> duruma geçer; CPU alması zamanlayıcının ayrı kararıdır!';
+  }
+}
+
+// Week 4 Race vs Mutex Simulator
+let raceUseMutex = false;
+let raceStep = 0;
+const RACE_UNSAFE = [
+  { a: 'Bekliyor', b: 'Bekliyor', stock: 1, msg: 'Başlangıç: Ortak stok = 1. Kasa A ve Kasa B son ürünü satmak istiyor. Kilit YOK!' },
+  { a: 'Stoku okur → 1 görür', b: '—', stock: 1, msg: 'Adım 1: A stoku okur (1). Tam yazmadan bağlam değişir ve B çalışmaya başlar (tek çekirdekte bile olur!).' },
+  { a: '(Kendi bildiği: 1)', b: 'Stoku okur → 1 görür!', stock: 1, msg: 'Adım 2: B de stoku okur ve henüz güncellenmediği için 1 görür!' },
+  { a: '0 yazar, SATIŞI ONAYLAR ✅', b: '(Kendi bildiği: 1)', stock: 0, msg: 'Adım 3: A stoğu 0 yapar ve 1. satışı onaylar.' },
+  { a: 'Bitti (Onaylandı)', b: 'Eski 1\'e göre 0 yazar, SATIŞI ONAYLAR ❌', stock: 0, msg: '🚨 YARIŞ DURUMU! Son stok 0 ama TEK ÜRÜN İKİ KEZ SATILDI!' }
+];
+const RACE_SAFE = [
+  { a: 'Bekliyor', b: 'Bekliyor', stock: 1, msg: 'Başlangıç: Ortak stok = 1. Okuma+kontrol+yazma adımları TEK ORTAK MUTEX içinde!' },
+  { a: '🔒 Ortak mutexi atomik alır', b: 'Kilidi ister → BEKLER 🔴', stock: 1, msg: 'Adım 1: A ortak kilidi alır. B kritik bölgeye giremez, beklemeye geçer.' },
+  { a: 'Stok 1 okur → 0 yazar → ONAYLAR ✅', b: 'Bekliyor...', stock: 0, msg: 'Adım 2: A kritik bölgeyi güvenle tamamlar ve 1. satışı onaylar.' },
+  { a: '🔓 Kilidi bırakır', b: 'Hazır olur → 🔒 Kilidi alır', stock: 0, msg: 'Adım 3: A kilidi bırakır; B kilidi aldıktan sonra stoku YENİDEN okur.' },
+  { a: 'Bitti (Onaylandı)', b: 'Stok 0 görür → 🔓 Bırakır (RET ✅)', stock: 0, msg: '✅ GÜVENLİ SONUÇ! B güncel 0 değerini görür, ikinci satış onaylanmaz. En fazla 1 satış!' }
+];
+function setRaceMode(useMutex) { raceUseMutex = useMutex; raceStep = 0; renderRace(); }
+function stepRace() { raceStep = (raceStep + 1) % 5; renderRace(); }
+function renderRace() {
+  const arr = raceUseMutex ? RACE_SAFE : RACE_UNSAFE;
+  const st = arr[raceStep];
+  const box = document.getElementById('raceDisplay');
+  if (!box) return;
+  box.innerHTML = `
+    <div class="grid-3">
+      <div style="background:var(--surface); border:1px solid var(--border); padding:12px; border-radius:10px; text-align:center;">
+        <div class="muted" style="font-size:12px;">Kasa A</div>
+        <div style="font-weight:800; margin-top:4px;">${st.a}</div>
+      </div>
+      <div style="background:var(--surface); border:2px solid var(--primary); padding:12px; border-radius:10px; text-align:center;">
+        <div class="muted" style="font-size:12px;">Ortak Stok Değişkeni</div>
+        <div style="font-size:26px; font-weight:900; color:var(--primary);">${st.stock}</div>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--border); padding:12px; border-radius:10px; text-align:center;">
+        <div class="muted" style="font-size:12px;">Kasa B</div>
+        <div style="font-weight:800; margin-top:4px;">${st.b}</div>
+      </div>
+    </div>
+    <div class="${raceStep === 4 ? (raceUseMutex ? 'ok-box' : 'trap-box') : 'tip-box'}" style="margin:10px 0 0;">
+      <strong>[${raceStep}/4]</strong> ${st.msg}
+    </div>`;
+}
+
+// ===================== 3. SPACED-REPETITION QUIZ ENGINE =====================
+let quizMode = 'smart';
+let quizQueue = [];
+let currentQ = null;
+let answeredCurrent = false;
+let repeatedInSession = new Set();
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuizMode(mode, btn) {
+  quizMode = mode;
+  document.querySelectorAll('#quizModeTabs .subtab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  let pool = [];
+  if (mode === 'smart') {
+    const weak = shuffle(QUESTIONS.filter(q => isWeak(q.id)));
+    const unmastered = shuffle(QUESTIONS.filter(q => !isWeak(q.id) && !isMastered(q.id)));
+    const mastered = shuffle(QUESTIONS.filter(q => isMastered(q.id)));
+    pool = [...weak, ...unmastered, ...mastered];
+  } else if (mode === 'weak') {
+    pool = shuffle(QUESTIONS.filter(q => isWeak(q.id)));
+  } else if (mode === 'traps') {
+    pool = shuffle(QUESTIONS.filter(q => q.trap));
+  } else if (mode.startsWith('w')) {
+    const w = parseInt(mode.slice(1));
+    const wqs = QUESTIONS.filter(q => q.week === w);
+    pool = [...shuffle(wqs.filter(q => !isMastered(q.id))), ...shuffle(wqs.filter(q => isMastered(q.id)))];
+  }
+  quizQueue = pool.map(q => q.id);
+  nextQuestion();
+}
+
+function nextQuestion() {
+  answeredCurrent = false;
+  const area = document.getElementById('quizArea');
+  if (quizQueue.length === 0) {
+    if (quizMode === 'weak') {
+      area.innerHTML = `<div class="ok-box"><h3>🎉 Harika! Tekrar Kuyruğun Tertemiz (0 zayıf soru)!</h3><p>Tüm zayıf soruları üst üste 2 kez doğru bildin. Şimdi "Akıllı Karma" veya "20 Soruluk Deneme"ye geçebilirsin!</p></div>`;
+      return;
+    }
+    // Refill with remaining unmastered or restart
+    const rem = QUESTIONS.filter(q => !isMastered(q.id));
+    if (rem.length > 0 && quizMode === 'smart') {
+      quizQueue = shuffle(rem).map(q => q.id);
+    } else {
+      area.innerHTML = `<div class="ok-box"><h3>🏆 Bu Moddaki Tüm Soruları Tamamladın!</h3><p>Tekrar pekiştirmek için başka bir hafta seç veya 20 Soruluk Deneme Sınavına geç.</p><button class="btn primary" onclick="startQuizMode('${quizMode}')">🔄 Aynı Modu Karıştırıp Tekrarla</button></div>`;
+      return;
+    }
+  }
+  const qid = quizQueue.shift();
+  currentQ = QUESTIONS.find(q => q.id === qid);
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentQ;
+  const st = getQStat(q.id);
+  const isRep = repeatedInSession.has(q.id) || isWeak(q.id);
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  const masteryTag = st.streak >= 2
+    ? '<span class="badge b-green">✅ Tam Öğrenildi (2/2)</span>'
+    : st.streak === 1
+      ? '<span class="badge b-warn">⭐ 1/2 (Bir kez daha bilirsen yerleşecek!)</span>'
+      : '<span class="badge b-blue">🆕 Yeni / Öğreniliyor (0/2)</span>';
+
+  let html = `
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+      <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+        <span class="badge b-purple">Hafta ${q.week}</span>
+        ${q.trap ? '<span class="badge b-red">⚠️ Sınav Tuzağı</span>' : ''}
+        ${isRep ? '<span class="badge b-warn">🔁 TEKRAR SORUSU</span>' : ''}
+        ${masteryTag}
+      </div>
+      <span class="muted" style="font-size:12.5px;">Kuyrukta kalan: ${quizQueue.length + 1}</span>
+    </div>
+    <h3 style="font-size:17.5px; margin-bottom:14px; line-height:1.45;">${q.q}</h3>
+    <div id="quizOpts">
+      ${q.opts.map((o, i) => `<button class="quiz-option" id="qopt-${i}" onclick="answerQuiz(${i})"><strong>${letters[i]})</strong> ${o}</button>`).join('')}
+    </div>
+    <div id="quizFeedback" style="display:none; margin-top:12px;"></div>
+  `;
+  document.getElementById('quizArea').innerHTML = html;
+}
+
+function answerQuiz(idx) {
+  if (answeredCurrent) return;
+  answeredCurrent = true;
+  const q = currentQ;
+  const st = getQStat(q.id);
+  const correct = (idx === q.ans);
+
+  document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === idx) btn.classList.add('wrong');
+  });
+
+  if (correct) {
+    state.streak++;
+    st.streak = Math.min(2, st.streak + 1);
+    if (st.streak >= 2) st.flagged = false;
+    else {
+      // If it was previously wrong or only 1/2, schedule a confirmation repeat 4 questions later!
+      if (st.wrongCount > 0 || st.flagged) {
+        insertRepeat(q.id, 4);
+      }
+    }
+  } else {
+    state.streak = 0;
+    st.streak = 0;
+    st.wrongCount++;
+    st.flagged = true;
+    repeatedInSession.add(q.id);
+    insertRepeat(q.id, 3); // Re-ask 3 questions later!
+  }
+  saveState();
+
+  const fb = document.getElementById('quizFeedback');
+  fb.style.display = 'block';
+  fb.innerHTML = `
+    <div class="${correct ? 'ok-box' : 'trap-box'}">
+      <div style="font-weight:800; font-size:15px; margin-bottom:6px;">
+        ${correct
+          ? (st.streak >= 2 ? '✅ Doğru! Bu kavram artık aklına yerleşti (2/2)!' : '✅ Doğru! (1/2) — Bir kez daha bilirsen tamamen yerleşecek.')
+          : '❌ Yanlış! Endişelenme — bu soruyu 3 soru sonra tekrar sorup aklına kazıyacağım! 🔁'}
+      </div>
+      <div>${q.exp}</div>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+      <button class="btn primary" onclick="nextQuestion()">Sonraki Soru (Enter) →</button>
+      <button class="btn warn" onclick="flagForRepeat()">🔁 Emin Değilim, 3 Soru Sonra Tekrar Sor (R)</button>
+    </div>`;
+}
+
+function insertRepeat(qid, offset) {
+  // avoid immediate duplicate
+  quizQueue = quizQueue.filter(id => id !== qid);
+  const pos = Math.min(offset, quizQueue.length);
+  quizQueue.splice(pos, 0, qid);
+}
+
+function flagForRepeat() {
+  if (!currentQ) return;
+  const st = getQStat(currentQ.id);
+  st.flagged = true;
+  st.streak = 0;
+  repeatedInSession.add(currentQ.id);
+  insertRepeat(currentQ.id, 3);
+  saveState();
+  nextQuestion();
+}
+
+function resetQuizProgress() {
+  if (!confirm('Tüm test ilerlemen sıfırlansın mı?')) return;
+  state.qStats = {};
+  state.streak = 0;
+  repeatedInSession.clear();
+  saveState();
+  startQuizMode(quizMode);
+}
+
+// ===================== 4. CALCULATION LAB (H5 & H6) =====================
+function showCalcTab(tab, btn) {
+  document.querySelectorAll('#sec-calc .subtab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('calc-sched').style.display = tab === 'sched' ? 'block' : 'none';
+  document.getElementById('calc-mem').style.display = tab === 'mem' ? 'block' : 'none';
+}
+
+const SCHED_PRESETS = [
+  { name: 'Ders Örneği', q: 2, jobs: [{ id: 'A', b: 8 }, { id: 'B', b: 4 }, { id: 'C', b: 2 }] },
+  { name: 'Hafta 5 Ödev', q: 2, jobs: [{ id: 'D', b: 6 }, { id: 'E', b: 3 }, { id: 'F', b: 1 }] },
+  { name: 'Sınav Provası 1', q: 2, jobs: [{ id: 'P1', b: 6 }, { id: 'P2', b: 2 }, { id: 'P3', b: 4 }] },
+  { name: 'Sınav Provası 2', q: 2, jobs: [{ id: 'X', b: 5 }, { id: 'Y', b: 3 }, { id: 'Z', b: 2 }] },
+  { name: 'Sınav Provası 3', q: 3, jobs: [{ id: 'A', b: 9 }, { id: 'B', b: 3 }, { id: 'C', b: 3 }] }
+];
+
+function computeSchedule(preset, algo) {
+  const jobs = preset.jobs.map((j, idx) => ({ ...j, idx, rem: j.b, first: -1, comp: 0 }));
+  const segs = [];
+  let t = 0;
+  if (algo === 'FCFS') {
+    jobs.forEach(j => {
+      j.first = t;
+      segs.push({ id: j.id, idx: j.idx, start: t, end: t + j.b });
+      t += j.b;
+      j.comp = t;
+    });
+  } else if (algo === 'SJF') {
+    const sorted = [...jobs].sort((a, b) => a.b - b.b || a.idx - b.idx);
+    sorted.forEach(j => {
+      j.first = t;
+      segs.push({ id: j.id, idx: j.idx, start: t, end: t + j.b });
+      t += j.b;
+      j.comp = t;
+    });
+  } else {
+    const q = preset.q;
+    const queue = [...jobs];
+    while (queue.length) {
+      const j = queue.shift();
+      if (j.first === -1) j.first = t;
+      const run = Math.min(q, j.rem);
+      segs.push({ id: j.id, idx: j.idx, start: t, end: t + run });
+      t += run;
+      j.rem -= run;
+      if (j.rem > 0) queue.push(j);
+      else j.comp = t;
+    }
+  }
+  jobs.forEach(j => { j.R = j.first; j.T = j.comp; j.W = j.T - j.b; });
+  const avgR = +(jobs.reduce((s, j) => s + j.R, 0) / jobs.length).toFixed(2);
+  const avgW = +(jobs.reduce((s, j) => s + j.W, 0) / jobs.length).toFixed(2);
+  const avgT = +(jobs.reduce((s, j) => s + j.T, 0) / jobs.length).toFixed(2);
+  return { jobs, segs, total: t, avgR, avgW, avgT };
+}
+
+let curSchedSol = null;
+function loadSchedLab() {
+  const p = SCHED_PRESETS[parseInt(document.getElementById('schedPreset').value)];
+  const algo = document.getElementById('schedAlgo').value;
+  curSchedSol = computeSchedule(p, algo);
+  document.getElementById('schedSolutionBox').style.display = 'none';
+
+  let rows = p.jobs.map((j, i) => `
+    <tr>
+      <td><strong>${j.id}</strong></td>
+      <td>0</td>
+      <td><strong>${j.b}</strong></td>
+      <td><input type="number" id="sc-R-${i}" class="inline-input" placeholder="?"></td>
+      <td><input type="number" id="sc-C-${i}" class="inline-input" placeholder="?"></td>
+      <td><input type="number" id="sc-W-${i}" class="inline-input" placeholder="?"></td>
+    </tr>`).join('');
+
+  document.getElementById('schedProblemBox').innerHTML = `
+    <div class="tip-box" style="margin-top:0;">
+      <strong>Senaryo:</strong> ${p.name} • Yöntem: <strong>${algo}${algo==='RR' ? ' (q = '+p.q+')' : ''}</strong> • Toplam CPU = <strong>${curSchedSol.total}</strong> birim • Başlangıç sırası: ${p.jobs.map(j=>j.id).join(', ')}.
+    </div>
+    <table>
+      <thead><tr><th>İş</th><th>Varış (V)</th><th>CPU (B)</th><th>İlk Yanıt (R)</th><th>Bitiş = Kalış (C=T)</th><th>Bekleme (W = T−B)</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div id="schedCheckMsg"></div>`;
+}
+
+function checkSchedAnswers() {
+  let allOk = true;
+  curSchedSol.jobs.forEach((j, i) => {
+    [['R', j.R], ['C', j.comp], ['W', j.W]].forEach(([k, val]) => {
+      const inp = document.getElementById(`sc-${k}-${i}`);
+      const ok = inp.value !== '' && Number(inp.value) === val;
+      inp.classList.remove('check-ok', 'check-bad');
+      inp.classList.add(ok ? 'check-ok' : 'check-bad');
+      if (!ok) allOk = false;
+    });
+  });
+  const msg = document.getElementById('schedCheckMsg');
+  msg.innerHTML = allOk
+    ? `<div class="ok-box">🎉 MÜKEMMEL! Tüm değerler doğru! Ort. R = <strong>${curSchedSol.avgR}</strong>, Ort. W = <strong>${curSchedSol.avgW}</strong>, Ort. T = <strong>${curSchedSol.avgT}</strong></div>`
+    : `<div class="warn-box">Kırmızı kutuları tekrar kontrol et veya "Çizelge ve Çözümü Göster" butonuna tıkla!</div>`;
+}
+
+function revealSchedSolution() {
+  const s = curSchedSol;
+  const cls = ['c-A', 'c-B', 'c-C'];
+  const gantt = s.segs.map(seg => {
+    const w = ((seg.end - seg.start) / s.total) * 100;
+    return `<div class="gantt-seg ${cls[seg.idx % 3]}" style="width:${w}%">${seg.id}<small>${seg.start}–${seg.end}</small></div>`;
+  }).join('');
+
+  const rows = s.jobs.map(j => `<tr><td><strong>${j.id}</strong></td><td>${j.first}</td><td>${j.comp}</td><td><strong>${j.R}</strong></td><td><strong>${j.T}</strong></td><td><strong>${j.W}</strong></td></tr>`).join('');
+  const box = document.getElementById('schedSolutionBox');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <h4>📊 Gantt Çizelgesi</h4>
+    <div class="gantt">${gantt}</div>
+    <table>
+      <thead><tr><th>İş</th><th>İlk CPU</th><th>Bitiş (C)</th><th>İlk Yanıt (R)</th><th>Kalış (T)</th><th>Bekleme (W)</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="ok-box" style="margin:0;">
+      <strong>Ortalamalar:</strong> Ort. R = <strong>${s.avgR}</strong> &nbsp;|&nbsp; Ort. W = <strong>${s.avgW}</strong> &nbsp;|&nbsp; Ort. T = <strong>${s.avgT}</strong> &nbsp;|&nbsp; Son bitiş = <strong>${s.total}</strong>
+    </div>`;
+}
+
+function setOv(s, q) {
+  document.getElementById('ovS').value = s;
+  document.getElementById('ovQ').value = q;
+  calcOverhead();
+}
+function calcOverhead() {
+  const s = parseFloat(document.getElementById('ovS').value) || 0;
+  const q = parseFloat(document.getElementById('ovQ').value) || 0.1;
+  const pct = ((s / (q + s)) * 100).toFixed(1);
+  let comment = pct >= 15 ? '🔴 Çok yüksek! CPU zamanının büyük kısmı geçişlere gidiyor.'
+              : pct >= 7 ? '🟡 Dengeli bölge: İyi ilk yanıt ve makul geçiş maliyeti.'
+              : '🟢 Geçiş maliyeti çok düşük ama q büyükse ilk yanıt gecikir (FCFS gibi davranabilir).';
+  document.getElementById('ovResult').innerHTML = `
+    Hesap: <code>${s} / (${q} + ${s}) = ${s} / ${(q+s).toFixed(2)}</code> → Yönetim Payı = <strong>%${pct}</strong><br>${comment}`;
+}
+
+// Memory Address Translation Drill
+const PAGE_TABLE = { 0: 5, 1: 2, 2: 7, 3: 1 };
+let curAddr = { size: 4096, virt: 5000 };
+
+function loadAddrPreset(size, virt) {
+  curAddr = { size, virt };
+  ['inPage','inOffset','inFrame','inPhys'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.classList.remove('check-ok', 'check-bad');
+  });
+  document.getElementById('addrFeedback').innerHTML = '';
+  document.getElementById('addrPrompt').innerHTML = `Sayfa Boyutu = <span class="badge b-purple">${size} bayt</span> • Sanal Adres = <span class="badge b-blue">${virt}</span>`;
+}
+function randomAddrDrill() {
+  const size = Math.random() < 0.45 ? 1000 : 4096;
+  const maxV = size * 4 - 1;
+  const virt = Math.floor(Math.random() * maxV);
+  loadAddrPreset(size, virt);
+}
+function getAddrExpected() {
+  const p = Math.floor(curAddr.virt / curAddr.size);
+  const off = curAddr.virt % curAddr.size;
+  const f = PAGE_TABLE[p];
+  const phys = f * curAddr.size + off;
+  return { p, off, f, phys };
+}
+function checkAddr() {
+  const exp = getAddrExpected();
+  const pairs = [['inPage', exp.p], ['inOffset', exp.off], ['inFrame', exp.f], ['inPhys', exp.phys]];
+  let allOk = true;
+  pairs.forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    const ok = el.value !== '' && Number(el.value) === val;
+    el.classList.remove('check-ok', 'check-bad');
+    el.classList.add(ok ? 'check-ok' : 'check-bad');
+    if (!ok) allOk = false;
+  });
+  document.getElementById('addrFeedback').innerHTML = allOk
+    ? `<div class="ok-box" style="margin:0;">🎉 Süper! Fiziksel adres = <strong>${exp.phys}</strong>. Ofset (${exp.off}) aynen korundu!</div>`
+    : `<div class="warn-box" style="margin:0;">Kırmızı alanları kontrol et ya da "Adım Adım Çözüm"e tıkla.</div>`;
+}
+function showAddrSolution() {
+  const e = getAddrExpected();
+  document.getElementById('addrFeedback').innerHTML = `
+    <div class="tip-box" style="margin:0; font-size:13.5px;">
+      1) <strong>Böl:</strong> ${curAddr.virt} = <strong>${e.p}</strong> × ${curAddr.size} + <strong>${e.off}</strong> → Sayfa = <strong>${e.p}</strong>, Ofset = <strong>${e.off}</strong><br>
+      2) <strong>Tablo:</strong> Sayfa ${e.p} → Çerçeve <strong>${e.f}</strong><br>
+      3) <strong>Birleştir:</strong> ${e.f} × ${curAddr.size} + ${e.off} = ${e.f * curAddr.size} + ${e.off} = <strong>${e.phys}</strong>
+    </div>`;
+}
+
+// Fragmentation drills
+const FRAG_DRILLS = [
+  { data: 10, page: 4, note: 'Ders Örneği (Slayt 11)' },
+  { data: 5, page: 2, note: 'Hafta 6 Ödev Örneği' },
+  { data: 13, page: 4, note: 'Sınav Provası' },
+  { data: 8, page: 4, note: 'Tam Bölünen Tuzak!' },
+  { data: 9, page: 2, note: 'Sınav Provası' }
+];
+let fragIdx = 0;
+function loadFrag() {
+  const d = FRAG_DRILLS[fragIdx];
+  document.getElementById('fragQuestion').innerHTML = `[${d.note}] <strong>${d.data} KiB</strong> veri için sayfa boyutu <strong>${d.page} KiB</strong> ise:`;
+  ['inFragPages','inFragAlloc','inFragWaste'].forEach(id => {
+    const el = document.getElementById(id); el.value = ''; el.classList.remove('check-ok','check-bad');
+  });
+  document.getElementById('fragFeedback').innerHTML = '';
+}
+function checkFrag() {
+  const d = FRAG_DRILLS[fragIdx];
+  const pages = Math.ceil(d.data / d.page);
+  const alloc = pages * d.page;
+  const waste = alloc - d.data;
+  const checks = [['inFragPages', pages], ['inFragAlloc', alloc], ['inFragWaste', waste]];
+  let okAll = true;
+  checks.forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    const ok = el.value !== '' && Number(el.value) === val;
+    el.classList.remove('check-ok','check-bad');
+    el.classList.add(ok ? 'check-ok' : 'check-bad');
+    if (!ok) okAll = false;
+  });
+  document.getElementById('fragFeedback').innerHTML = okAll
+    ? `<div class="ok-box" style="margin:0;">✅ Doğru! ${pages} sayfa × ${d.page} KiB = ${alloc} KiB ayrılır → <strong>${waste} KiB iç parçalanma</strong>.</div>`
+    : `<div class="warn-box" style="margin:0;">İpucu: ${d.data} / ${d.page} yukarı yuvarlanır = <strong>${pages} sayfa</strong> (${alloc} KiB), boş kalan = ${alloc} − ${d.data} = <strong>${waste} KiB</strong>.</div>`;
+}
+function nextFrag() { fragIdx = (fragIdx + 1) % FRAG_DRILLS.length; loadFrag(); }
+
+// ===================== 5. FLASHCARDS =====================
+let fcDeck = [];
+let fcFlipped = false;
+let fcDoneCount = 0;
+let fcTotalInit = 42;
+
+function filterCards(cat, btn) {
+  document.querySelectorAll('#sec-cards .subtab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const list = cat === 'all' ? FLASHCARDS : FLASHCARDS.filter(c => c.cat === cat);
+  fcDeck = shuffle(list);
+  fcTotalInit = fcDeck.length;
+  fcDoneCount = 0;
+  renderCard();
+}
+function renderCard() {
+  fcFlipped = false;
+  const box = document.getElementById('flashcardBox');
+  box.classList.remove('flipped');
+  if (fcDeck.length === 0) {
+    document.getElementById('fcTag').textContent = 'Tamamlandı!';
+    document.getElementById('fcFront').innerHTML = '🎉 Bu destedeki tüm kartları hatırladın!';
+    document.getElementById('fcBack').style.display = 'none';
+    document.getElementById('fcHint').textContent = 'Yukarıdan yeni bir kategori seçebilirsin.';
+    document.getElementById('fcStatus').textContent = `Bitti (${fcTotalInit}/${fcTotalInit})`;
+    return;
+  }
+  const c = fcDeck[0];
+  document.getElementById('fcTag').textContent = c.tag;
+  document.getElementById('fcFront').innerHTML = c.f;
+  document.getElementById('fcBack').innerHTML = c.b;
+  document.getElementById('fcBack').style.display = 'none';
+  document.getElementById('fcHint').textContent = 'Cevabı görmek için tıkla veya Boşluk (Space) tuşuna bas';
+  document.getElementById('fcStatus').textContent = `Kalan: ${fcDeck.length} • Bilinen: ${fcDoneCount}/${fcTotalInit}`;
+}
+function flipCard() {
+  if (!fcDeck.length) return;
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcardBox').classList.toggle('flipped', fcFlipped);
+  document.getElementById('fcBack').style.display = fcFlipped ? 'block' : 'none';
+  document.getElementById('fcHint').textContent = fcFlipped ? 'Aşağıdan kendine not ver!' : 'Cevabı görmek için tıkla';
+}
+function rateCard(knew) {
+  if (!fcDeck.length) return;
+  const c = fcDeck.shift();
+  if (knew) {
+    fcDoneCount++;
+  } else {
+    const pos = Math.min(3, fcDeck.length);
+    fcDeck.splice(pos, 0, c);
+  }
+  renderCard();
+}
+
+// ===================== 6. WRITTEN & CASE STUDIO =====================
+function renderWritten(filter, btn) {
+  document.querySelectorAll('#sec-written .subtab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const list = filter === 'all' ? WRITTEN_QS : WRITTEN_QS.filter(w => w.type === filter);
+  const el = document.getElementById('writtenList');
+  el.innerHTML = list.map((w, idx) => `
+    <div class="card" style="background:var(--surface-2); margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        <span class="badge ${w.type==='case'?'b-red':'b-blue'}">${w.id} • ${w.type==='case'?'Büyük Senaryo (Bölüm 3)':'Kısa Cevap (Bölüm 2)'}</span>
+        <span class="badge b-purple">${w.week}</span>
+      </div>
+      <p style="font-weight:700; white-space:pre-line;">${w.q}</p>
+      <textarea placeholder="Cevabını ve 1 cümlelik GEREKÇENİ buraya yaz (veya zihninden kur)..."></textarea>
+      <div style="margin-top:8px;">
+        <button class="btn sm primary" onclick="toggleModel('wm-${idx}')">👁️ Model Cevabı & Puanlama Anahtarını Göster</button>
+      </div>
+      <div id="wm-${idx}" style="display:none; margin-top:10px;">
+        <div class="ok-box" style="margin:0 0 8px;"><strong>✅ Model Cevap:</strong><br>${w.model}</div>
+        <div style="font-size:13px;"><strong>Kendini Puanla:</strong><br>
+          ${w.checklist.map(c => `<label style="display:block; margin-top:4px; cursor:pointer;"><input type="checkbox"> ${c}</label>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleModel(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ===================== 7. 20-QUESTION MOCK EXAM =====================
+let examQuestions = [];
+let examAnswers = {};
+let examSubmitted = false;
+
+function startMockExam() {
+  examSubmitted = false;
+  examAnswers = {};
+  // Balanced pick: ~3-4 per week = 20 total
+  const picked = [];
+  const counts = { 1: 3, 2: 3, 3: 3, 4: 4, 5: 3, 6: 4 };
+  for (let w = 1; w <= 6; w++) {
+    picked.push(...shuffle(QUESTIONS.filter(q => q.week === w)).slice(0, counts[w]));
+  }
+  examQuestions = shuffle(picked);
+  renderExam();
+}
+
+function renderExam() {
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  let html = '';
+  if (examSubmitted) {
+    let score = 0;
+    const byWeek = { 1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0], 6:[0,0] };
+    const wrongIds = [];
+    examQuestions.forEach(q => {
+      byWeek[q.week][1]++;
+      if (examAnswers[q.id] === q.ans) { score++; byWeek[q.week][0]++; }
+      else wrongIds.push(q.id);
+    });
+    const pct = Math.round((score / examQuestions.length) * 100);
+    html += `
+      <div class="card">
+        <h3>📊 Deneme Sınavı Karnen: ${score} / ${examQuestions.length} (${pct} Puan)</h3>
+        <div class="${pct >= 80 ? 'ok-box' : pct >= 60 ? 'warn-box' : 'trap-box'}">
+          ${pct >= 85 ? '🏆 Harika! Sınava fazlasıyla hazırsın — yanlış yaptığın 1-2 noktaya bakıp rahatça gir!' : pct >= 65 ? '👍 İyi gidiyorsun! Aşağıdaki zayıf haftaları Tekrar Motoruna gönderip 15 dk daha pekiştir.' : '🔁 Tekrar zamanı! Yanlışlarını tek tıkla Tekrar Kuyruğuna gönderip üzerinden geç.'}
+        </div>
+        <div class="grid-6" style="margin:12px 0;">
+          ${[1,2,3,4,5,6].map(w => `<div style="background:var(--surface-2); border:1px solid var(--border); padding:8px; border-radius:8px; text-align:center;"><strong>Hafta ${w}</strong><br>${byWeek[w][0]} / ${byWeek[w][1]}</div>`).join('')}
+        </div>
+        ${wrongIds.length ? `<button class="btn danger" onclick="sendExamWrongsToRepeat([${wrongIds.join(',')}])">🔁 ${wrongIds.length} Yanlışı Tekrar Motoruna Gönder ve Şimdi Öğren</button>` : ''}
+      </div>`;
+  }
+
+  examQuestions.forEach((q, idx) => {
+    const sel = examAnswers[q.id];
+    html += `
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <strong>Soru ${idx + 1} / ${examQuestions.length}</strong>
+          <span class="badge b-blue">Hafta ${q.week}</span>
+        </div>
+        <p style="font-weight:700;">${q.q}</p>
+        ${q.opts.map((o, i) => {
+          let cls = 'quiz-option';
+          if (examSubmitted) {
+            if (i === q.ans) cls += ' correct';
+            else if (i === sel) cls += ' wrong';
+          } else if (i === sel) {
+            cls += ' correct';
+          }
+          return `<button class="${cls}" ${examSubmitted ? 'disabled' : ''} onclick="selectExamOpt(${q.id}, ${i})"><strong>${letters[i]})</strong> ${o}</button>`;
+        }).join('')}
+        ${examSubmitted ? `<div class="tip-box" style="margin:8px 0 0; font-size:13.5px;"><strong>Açıklama:</strong> ${q.exp}</div>` : ''}
+      </div>`;
+  });
+
+  if (!examSubmitted) {
+    const answeredCount = Object.keys(examAnswers).length;
+    html += `<div class="card" style="text-align:center;">
+      <p class="muted">Cevaplanan: ${answeredCount} / ${examQuestions.length}</p>
+      <button class="btn primary" style="font-size:16px; padding:12px 26px;" onclick="submitMockExam()">✅ Sınavı Bitir ve Karnemi Göster</button>
+    </div>`;
+  }
+  document.getElementById('examContainer').innerHTML = html;
+}
+
+function selectExamOpt(qid, optIdx) {
+  examAnswers[qid] = optIdx;
+  renderExam();
+}
+function submitMockExam() {
+  examSubmitted = true;
+  renderExam();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function sendExamWrongsToRepeat(ids) {
+  ids.forEach(id => {
+    const st = getQStat(id);
+    st.flagged = true;
+    st.streak = 0;
+    st.wrongCount++;
+  });
+  saveState();
+  showTab('quiz', document.querySelectorAll('.nav-btn')[2]);
+  startQuizMode('weak', document.querySelectorAll('#quizModeTabs .subtab')[1]);
+}
+
+// ===================== KEYBOARD SHORTCUTS =====================
+document.addEventListener('keydown', (e) => {
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+  const quizActive = document.getElementById('sec-quiz').classList.contains('active');
+  const cardsActive = document.getElementById('sec-cards').classList.contains('active');
+  if (quizActive) {
+    if (['1','2','3','4','5'].includes(e.key) && !answeredCurrent) {
+      const idx = parseInt(e.key) - 1;
+      if (currentQ && idx < currentQ.opts.length) answerQuiz(idx);
+    } else if (e.key === 'Enter' && answeredCurrent) {
+      nextQuestion();
+    } else if ((e.key === 'r' || e.key === 'R') && answeredCurrent) {
+      flagForRepeat();
+    }
+  } else if (cardsActive) {
+    if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+  }
+});
+
+// ===================== INIT =====================
+loadState();
+updateTopStats();
+renderPlanDashboard();
+showNoteWeek(1, document.querySelector('#noteTabs .subtab'));
+loadSchedLab();
+calcOverhead();
+loadAddrPreset(4096, 5000);
+loadFrag();
+filterCards('all', document.querySelector('#sec-cards .subtab'));
+renderWritten('all', document.querySelector('#sec-written .subtab'));
+</script>
+</body>
+</html>
